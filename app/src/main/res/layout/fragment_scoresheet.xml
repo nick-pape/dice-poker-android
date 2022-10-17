@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.ScoresheetFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <include
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/score_one"
+                layout="@layout/fragment_dice_score"
+            />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/score_two"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/score_three"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/score_four"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/score_five"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/score_six"
+                layout="@layout/fragment_dice_score"
+                />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </FrameLayout>
