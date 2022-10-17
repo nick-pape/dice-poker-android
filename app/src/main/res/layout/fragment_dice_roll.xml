@@ -24,8 +24,8 @@
             <ImageView
                 android:id="@+id/dice_one_image"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/dice_height"
+                android:layout_weight="2"
                 android:src="@drawable/dice_one"
             />
             <LinearLayout
@@ -35,8 +35,8 @@
             <ImageView
                 android:id="@+id/dice_two_image"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/dice_height"
+                android:layout_weight="2"
                 android:src="@drawable/dice_one"
                 />
             <LinearLayout
@@ -46,8 +46,8 @@
             <ImageView
                 android:id="@+id/dice_three_image"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/dice_height"
+                android:layout_weight="2"
                 android:src="@drawable/dice_one"
                 />
             <LinearLayout
@@ -57,8 +57,8 @@
             <ImageView
                 android:id="@+id/dice_four_image"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/dice_height"
+                android:layout_weight="2"
                 android:src="@drawable/dice_one"
                 />
             <LinearLayout
@@ -68,8 +68,8 @@
             <ImageView
                 android:id="@+id/dice_five_image"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
+                android:layout_height="@dimen/dice_height"
+                android:layout_weight="2"
                 android:src="@drawable/dice_one"
                 />
             <LinearLayout
