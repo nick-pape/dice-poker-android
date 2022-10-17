@@ -24,9 +24,9 @@ class CreateGameFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_create_game, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CreateGameViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(this)[CreateGameViewModel::class.java]
         // TODO: Use the ViewModel
     }
 
