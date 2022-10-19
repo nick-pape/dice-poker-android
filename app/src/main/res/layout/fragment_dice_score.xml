@@ -11,14 +11,14 @@
         >
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:id="@+id/dice_score_image"
             android:src="@drawable/dice_one"
             />
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:text="Score"
             android:background="@drawable/border"
             android:id="@+id/score_text"

@@ -1,11 +1,18 @@
 package com.nickpape.dicepokerbattleroyale.fragments
 
+import android.content.res.Configuration
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import com.nickpape.dicepokerbattleroyale.R
+import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceRollBinding
+import com.nickpape.dicepokerbattleroyale.databinding.FragmentScoresheetBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,14 +36,30 @@ class DiceRollFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+    private var _binding: FragmentDiceRollBinding? = null
+    private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dice_roll, container, false)
+        _binding = FragmentDiceRollBinding.inflate(inflater, container, false)
+
+        if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK === Configuration.UI_MODE_NIGHT_YES) {
+            binding.diceOneImage.setSvgColor(R.color.primaryTextColor)
+            binding.diceTwoImage.setSvgColor(R.color.primaryTextColor)
+            binding.diceThreeImage.setSvgColor(R.color.primaryTextColor)
+            binding.diceFourImage.setSvgColor(R.color.primaryTextColor)
+            binding.diceFiveImage.setSvgColor(R.color.primaryTextColor)
+        }
+
+        return binding.root
     }
+
+    fun ImageView.setSvgColor(@ColorRes color: Int) =
+        setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_IN)
 
     companion object {
         /**

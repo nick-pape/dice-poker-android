@@ -1,12 +1,16 @@
 package com.nickpape.dicepokerbattleroyale.fragments
 
+import android.content.res.Configuration
+import android.graphics.PorterDuff
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.nickpape.dicepokerbattleroyale.R
-import com.nickpape.dicepokerbattleroyale.databinding.FragmentHomeBinding
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentScoresheetBinding
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,8 +51,24 @@ class ScoresheetFragment : Fragment() {
         binding.scoreFour.diceScoreImage.setImageResource(R.drawable.dice_four)
         binding.scoreFive.diceScoreImage.setImageResource(R.drawable.dice_five)
         binding.scoreSix.diceScoreImage.setImageResource(R.drawable.dice_six)
+
+        if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK === Configuration.UI_MODE_NIGHT_YES) {
+            binding.scoreOne.diceScoreImage.setSvgColor(R.color.primaryTextColor)
+            binding.scoreTwo.diceScoreImage.setSvgColor(R.color.primaryTextColor)
+            binding.scoreThree.diceScoreImage.setSvgColor(R.color.primaryTextColor)
+            binding.scoreFour.diceScoreImage.setSvgColor(R.color.primaryTextColor)
+            binding.scoreFive.diceScoreImage.setSvgColor(R.color.primaryTextColor)
+            binding.scoreSix.diceScoreImage.setSvgColor(R.color.primaryTextColor)
+        }
+
+
+
         return binding.root
     }
+
+    fun ImageView.setSvgColor(@ColorRes color: Int) =
+        setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_IN)
+
 
     companion object {
         /**
