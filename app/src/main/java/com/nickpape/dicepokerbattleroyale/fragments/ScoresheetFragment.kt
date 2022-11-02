@@ -2,6 +2,7 @@ package com.nickpape.dicepokerbattleroyale.fragments
 
 import android.content.res.Configuration
 import android.graphics.PorterDuff
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -61,7 +62,23 @@ class ScoresheetFragment : Fragment() {
             binding.scoreSix.diceScoreImage.setSvgColor(R.color.primaryTextColor)
         }
 
+        binding.threeOfAKind.diceScoreImage.visibility = View.INVISIBLE
+        binding.fourOfAKind.diceScoreImage.visibility = View.INVISIBLE
+        binding.fullHouse.diceScoreImage.visibility = View.INVISIBLE
+        binding.smallStraight.diceScoreImage.visibility = View.INVISIBLE
+        binding.largeStraight.diceScoreImage.visibility = View.INVISIBLE
+        binding.yahtzee.diceScoreImage.visibility = View.INVISIBLE
+        binding.yahtzeeBonus.diceScoreImage.visibility = View.INVISIBLE
+        binding.chance.diceScoreImage.visibility = View.INVISIBLE
 
+        binding.threeOfAKind.diceScoreText.text = "3 of Kind"
+        binding.fourOfAKind.diceScoreText.text = "4 of Kind"
+        binding.fullHouse.diceScoreText.text = "Full House"
+        binding.smallStraight.diceScoreText.text = "Small Straight"
+        binding.largeStraight.diceScoreText.text = "Large Straight"
+        binding.yahtzee.diceScoreText.text = "Yahtzee"
+        binding.yahtzeeBonus.diceScoreText.text = "Bonus"
+        binding.chance.diceScoreText.text = "Chance"
 
         return binding.root
     }

@@ -9,57 +9,125 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
+        android:layout_margin="4dp"
         >
         <LinearLayout
-            android:layout_width="300dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:layout_weight="2"
+            android:layout_marginRight="30dp"
             >
             <include
                 android:layout_height="0dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/score_one"
                 layout="@layout/fragment_dice_score"
             />
             <include
                 android:layout_height="0dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/score_two"
                 layout="@layout/fragment_dice_score"
                 />
             <include
                 android:layout_height="0dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/score_three"
                 layout="@layout/fragment_dice_score"
                 />
             <include
                 android:layout_height="0dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/score_four"
                 layout="@layout/fragment_dice_score"
                 />
             <include
                 android:layout_height="0dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/score_five"
                 layout="@layout/fragment_dice_score"
                 />
             <include
                 android:layout_height="0dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:id="@+id/score_six"
                 layout="@layout/fragment_dice_score"
                 />
 
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="3"
+            android:gravity="right"
+            android:layout_marginLeft="30dp"
+            >
+            <include
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/three_of_a_kind"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/four_of_a_kind"
+                layout="@layout/fragment_dice_score"
+            />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/full_house"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/small_straight"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/large_straight"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/yahtzee"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/yahtzee_bonus"
+                layout="@layout/fragment_dice_score"
+                />
+            <include
+                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:id="@+id/chance"
+                layout="@layout/fragment_dice_score"
+                />
         </LinearLayout>
 
     </LinearLayout>

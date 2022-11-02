@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.nickpape.dicepokerbattleroyale.Player
+import com.nickpape.dicepokerbattleroyale.PlayerChipAdapter
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentGameBinding
 
@@ -26,16 +29,32 @@ class GameFragment : Fragment() {
     ): View? {
 
         _binding = FragmentGameBinding.inflate(inflater, container, false)
-        return binding.root
 
+        val adapter = PlayerChipAdapter()
+        binding.playerChips.adapter = adapter
+        binding.playerChips.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
+
+        adapter.submitList(listOf(
+            Player("Nick", 123),
+            Player("Katie", 420),
+            Player("Dustin", 69),
+            Player("Player 1", 1),
+            Player("Player 2", 2),
+            Player("Player 3", 3),
+            Player("Player 4", 4),
+            Player("Player 5", 5),
+            Player("Player 6", 6)
+        ))
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
+        /*binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-        }
+        }*/
     }
 
     override fun onDestroyView() {
