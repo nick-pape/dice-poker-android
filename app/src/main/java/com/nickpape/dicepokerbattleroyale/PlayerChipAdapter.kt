@@ -3,6 +3,7 @@ package com.nickpape.dicepokerbattleroyale
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,17 +24,18 @@ class PlayerChipAdapter : ListAdapter<Player, PlayerChipAdapter.VH>(PlayerDiff()
 
             val chip = playerChipBinding.chip
 
-            chip.viewTreeObserver.addOnGlobalLayoutListener(object :
-                ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    val badgeDrawable = BadgeDrawable.create(playerChipBinding.root.context)
-                    badgeDrawable.number = playerScore.score
-                    badgeDrawable.verticalOffset = 25
-                    badgeDrawable.horizontalOffset = 15
-                    BadgeUtils.attachBadgeDrawable(badgeDrawable, chip, null)
-                    // chip.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                }
-            })
+            chip.viewTreeObserver.addOnGlobalLayoutListener {
+                val badgeDrawable = BadgeDrawable.create(playerChipBinding.root.context)
+                badgeDrawable.number = playerScore.score
+                badgeDrawable.verticalOffset = 25
+                badgeDrawable.horizontalOffset = 15
+                BadgeUtils.attachBadgeDrawable(badgeDrawable, chip, null)
+                // chip.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+
+            chip.setOnClickListener {
+                Toast.makeText(chip.context, "Clicked on player ${playerScore.name}", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
