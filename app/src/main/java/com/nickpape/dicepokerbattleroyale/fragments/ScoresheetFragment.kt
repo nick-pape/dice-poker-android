@@ -1,18 +1,29 @@
 package com.nickpape.dicepokerbattleroyale.fragments
 
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.PorterDuff
+import android.graphics.Typeface
 import android.opengl.Visibility
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.nickpape.dicepokerbattleroyale.CreateGameViewModel
 import com.nickpape.dicepokerbattleroyale.R
+import com.nickpape.dicepokerbattleroyale.ScoreSheet
+import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceScoreBinding
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentScoresheetBinding
+
+import kotlin.reflect.KMutableProperty
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +39,8 @@ class ScoresheetFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private val viewModel: CreateGameViewModel by activityViewModels()
 
     private var _binding: FragmentScoresheetBinding? = null
     private val binding get() = _binding!!
@@ -80,7 +93,57 @@ class ScoresheetFragment : Fragment() {
         binding.yahtzeeBonus.diceScoreText.text = "Bonus"
         binding.chance.diceScoreText.text = "Chance"
 
+        viewModel.observePotentialScores().observe(viewLifecycleOwner) {
+            val playerScoreSheet = viewModel.playerScoreSheet.value!!
+
+            setPotentialScore(playerScoreSheet::ones, it.ones, binding.scoreOne)
+            setPotentialScore(playerScoreSheet::twos, it.twos, binding.scoreTwo)
+            setPotentialScore(playerScoreSheet::threes, it.threes, binding.scoreThree)
+            setPotentialScore(playerScoreSheet::fours, it.fours, binding.scoreFour)
+            setPotentialScore(playerScoreSheet::fives, it.fives, binding.scoreFive)
+            setPotentialScore(playerScoreSheet::sixes, it.sixes, binding.scoreSix)
+
+            setPotentialScore(playerScoreSheet::threeOfKind, it.threeOfKind, binding.threeOfAKind)
+            setPotentialScore(playerScoreSheet::fourOfKind, it.fourOfKind, binding.fourOfAKind)
+            setPotentialScore(playerScoreSheet::fullHouse, it.fullHouse, binding.fullHouse)
+            setPotentialScore(playerScoreSheet::smallStraight, it.smallStraight, binding.smallStraight)
+            setPotentialScore(playerScoreSheet::largeStraight, it.largeStraight, binding.largeStraight)
+            setPotentialScore(playerScoreSheet::yahtzee, it.yahtzee, binding.yahtzee)
+            setPotentialScore(playerScoreSheet::chance, it.chance, binding.chance)
+        }
+
+
         return binding.root
+    }
+
+    fun setPotentialScore(
+        field: KMutableProperty<Int?>,
+        potentialScore: Int?,
+        scoreBinding: FragmentDiceScoreBinding
+    ) {
+        if (field.getter.call() == null) {
+            scoreBinding.scoreText.text = potentialScore.toString()
+
+            scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
+            scoreBinding.scoreText.setTypeface(null, Typeface.BOLD_ITALIC)
+            scoreBinding.scoreText.paintFlags = scoreBinding.scoreText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+            scoreBinding.scoreText.setOnClickListener {
+                field.setter.call(potentialScore)
+
+                viewModel.playerScoreSheet.postValue(
+                    viewModel.playerScoreSheet.value
+                )
+                viewModel.resetDice()
+            }
+        } else {
+            scoreBinding.scoreText.setOnClickListener(null)
+
+            scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25F)
+            scoreBinding.scoreText.setTypeface(null, Typeface.NORMAL )
+            scoreBinding.scoreText.paintFlags = scoreBinding.scoreText.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+
+        }
     }
 
     fun ImageView.setSvgColor(@ColorRes color: Int) =

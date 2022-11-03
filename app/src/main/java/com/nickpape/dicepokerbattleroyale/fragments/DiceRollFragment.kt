@@ -3,6 +3,7 @@ package com.nickpape.dicepokerbattleroyale.fragments
 import android.content.res.Configuration
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -81,6 +82,10 @@ class DiceRollFragment : Fragment() {
             setDiceImage(binding.diceThreeImage, it[2])
             setDiceImage(binding.diceFourImage, it[3])
             setDiceImage(binding.diceFiveImage, it[4])
+        }
+
+        viewModel.observePotentialScores().observe(viewLifecycleOwner) {
+            Log.d(javaClass.simpleName, it.toString())
         }
 
         return binding.root
