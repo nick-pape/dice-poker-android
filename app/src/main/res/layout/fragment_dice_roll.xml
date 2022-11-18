@@ -99,7 +99,16 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                />
+                >
+                <TextView
+                    android:id="@+id/roll_count_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="0/3"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

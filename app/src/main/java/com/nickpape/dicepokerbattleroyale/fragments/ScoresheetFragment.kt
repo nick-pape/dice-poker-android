@@ -142,7 +142,7 @@ class ScoresheetFragment : Fragment() {
             scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25F)
             scoreBinding.scoreText.setTypeface(null, Typeface.NORMAL )
             scoreBinding.scoreText.paintFlags = scoreBinding.scoreText.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
-
+            scoreBinding.scoreText.text = field.getter.call().toString()
         }
     }
 

@@ -36,7 +36,7 @@ data class ScoreSheet(
                 it == value
             }
             return if (filtered.size >= minimum) {
-                filtered.sum()
+                dice.sum()
             } else {
                 0
             }
@@ -116,6 +116,30 @@ data class ScoreSheet(
 class CreateGameViewModel : ViewModel() {
     public val playerScoreSheet = MutableLiveData(ScoreSheet())
 
+    fun isGameOver(): LiveData<Boolean> {
+        val result = MediatorLiveData<Boolean>()
+        result.value = false
+
+        result.addSource(playerScoreSheet) { value ->
+            val isDone = value.ones != null &&
+                    value.twos != null &&
+                    value.threes != null &&
+                    value.fours != null &&
+                    value.fives != null &&
+                    value.sixes != null &&
+                    value.threeOfKind != null &&
+                    value.fourOfKind != null &&
+                    value.fullHouse != null &&
+                    value.smallStraight != null &&
+                    value.largeStraight != null &&
+                    value.yahtzee != null &&
+                    value.chance != null
+            result.postValue(isDone)
+        }
+
+        return result
+    }
+
     // TODO() - have this be calculated only after dice rolls
     fun observePotentialScores(): LiveData<ScoreSheet> {
         val result = MediatorLiveData<ScoreSheet>()
@@ -127,10 +151,6 @@ class CreateGameViewModel : ViewModel() {
         return result
     }
 
-    private val blankDice: List<DiceRoll> = listOf(
-
-    )
-
     private val playerDice = MutableLiveData<List<DiceRoll>>(listOf(
         DiceRoll(null),
         DiceRoll(null),
@@ -140,6 +160,7 @@ class CreateGameViewModel : ViewModel() {
     ))
 
     fun resetDice() {
+        diceCount.value = 0
         playerDice.value = listOf(
             DiceRoll(null),
             DiceRoll(null),
@@ -162,6 +183,25 @@ class CreateGameViewModel : ViewModel() {
         playerDice.postValue(playerDice.value)
     }
 
+    private val diceCount: MutableLiveData<Int> = MutableLiveData(0)
+    fun observeDiceCount(): LiveData<Int> {
+        return diceCount
+    }
+
+    fun canRollAgain(): LiveData<Boolean> {
+        val result = MediatorLiveData<Boolean>()
+
+        result.addSource(diceCount) {
+            result.postValue(it < 3 && isGameOver().value == false)
+        }
+
+        result.addSource(isGameOver()) {
+            result.postValue(diceCount.value!! < 3 && !it)
+        }
+
+        return result
+    }
+
     fun rollDice() {
         val newDice = playerDice.value!!.map {
             if (it.isHeld) {
@@ -172,7 +212,6 @@ class CreateGameViewModel : ViewModel() {
         }
 
         playerDice.value = newDice
-
-
+        diceCount.value = diceCount.value?.plus(1)
     }
 }

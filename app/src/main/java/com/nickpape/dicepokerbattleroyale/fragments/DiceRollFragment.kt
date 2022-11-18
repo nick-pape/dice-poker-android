@@ -1,6 +1,7 @@
 package com.nickpape.dicepokerbattleroyale.fragments
 
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
@@ -86,6 +87,15 @@ class DiceRollFragment : Fragment() {
 
         viewModel.observePotentialScores().observe(viewLifecycleOwner) {
             Log.d(javaClass.simpleName, it.toString())
+        }
+
+        viewModel.observeDiceCount().observe(viewLifecycleOwner) {
+            binding.rollCountText.text = "$it/3"
+        }
+
+        viewModel.canRollAgain().observe(viewLifecycleOwner) {
+            binding.rollButton.isClickable = it
+            binding.rollButton.visibility = if (it) { View.VISIBLE } else { View.INVISIBLE }
         }
 
         return binding.root
