@@ -3,26 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/HomeFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/HomeFragment"
         android:name="com.nickpape.dicepokerbattleroyale.fragments.HomeFragment"
-        android:label="@string/first_fragment_label"
+        android:label="Dice Poker Battle Royale"
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_HomeFragment_to_CreateGameFragment"
+            app:destination="@id/CreateGameFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/CreateGameFragment"
+        android:name="com.nickpape.dicepokerbattleroyale.fragments.CreateGameFragment"
+        android:label="Create a Game"
+        tools:layout="@layout/fragment_create_game">
+
+        <action
+            android:id="@+id/action_CreateGameFragment_to_PlayGameFragment"
+            app:destination="@id/PlayGameFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/PlayGameFragment"
         android:name="com.nickpape.dicepokerbattleroyale.fragments.GameFragment"
-        android:label="@string/second_fragment_label"
+        android:label="Your Game"
         tools:layout="@layout/fragment_game">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_PlayGameFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
     </fragment>
 </navigation>
