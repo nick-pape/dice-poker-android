@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "92462755591",
+    "project_id": "dicepokerbattleroyale",
+    "storage_bucket": "dicepokerbattleroyale.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92462755591:android:8c94427836b174b5fe5fa2",
+        "android_client_info": {
+          "package_name": "com.nickpape.dicepokerbattleroyale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92462755591-fv89tsqehkang607krpe1v3j9pqmfsga.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nickpape.dicepokerbattleroyale",
+            "certificate_hash": "903c21c4c0234f4cba71f809e4ab9ca06da3e856"
+          }
+        },
+        {
+          "client_id": "92462755591-jbufhsnpb0rkob9dcpbki5restd34u60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDd9LtvEtH3Ry8G378TvckK0lJHF8wGzf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92462755591-jbufhsnpb0rkob9dcpbki5restd34u60.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
