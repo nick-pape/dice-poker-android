@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        val adapter = GameListAdapter(viewModel)
+        val adapter = GameListAdapter(viewModel, findNavController())
         binding.gamesList.adapter = adapter
         binding.gamesList.layoutManager = LinearLayoutManager(binding.gamesList.context)
         val itemDecor = DividerItemDecoration(binding.gamesList.context, LinearLayoutManager.VERTICAL)
@@ -51,9 +51,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
 
         binding.buttonCreateGame.setOnClickListener {
             findNavController().navigate(R.id.action_HomeFragment_to_CreateGameFragment)

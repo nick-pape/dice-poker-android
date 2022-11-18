@@ -16,6 +16,11 @@
             app:destination="@id/CreateGameFragment" />
 
         <action
+            android:id="@+id/action_HomeFragment_to_ReviewGameFragment"
+            app:destination="@id/ReviewGameFragment">
+        </action>
+
+        <action
             android:id="@+id/action_HomeFragment_to_SettingsFragment"
             app:destination="@id/SettingsFragment" />
     </fragment>
@@ -48,6 +53,10 @@
         android:name="com.nickpape.dicepokerbattleroyale.fragments.ReviewGameFragment"
         android:label="Game Review"
         tools:layout="@layout/fragment_review_game">
+
+        <argument
+            android:name="gameId"
+            app:argType="string" />
 
         <action
             android:id="@+id/action_ReviewGameFragment_to_PlayGameFragment"

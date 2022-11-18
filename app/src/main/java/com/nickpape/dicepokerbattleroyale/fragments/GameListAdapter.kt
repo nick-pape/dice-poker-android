@@ -4,13 +4,14 @@ import com.nickpape.dicepokerbattleroyale.MainViewModel
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nickpape.dicepokerbattleroyale.models.Game
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentGameRowBinding
 
-class GameListAdapter(private val viewModel: MainViewModel)
+class GameListAdapter(private val viewModel: MainViewModel, private val navController: NavController)
     : ListAdapter<Game, GameListAdapter.VH>(Diff()) {
     // This class allows the adapter to compute what has changed
     class Diff : DiffUtil.ItemCallback<Game>() {
@@ -31,12 +32,20 @@ class GameListAdapter(private val viewModel: MainViewModel)
             val game = viewModel.getGame(position)
             holder.rowBinding.playerNames.text = game.players.joinToString()
             // Note to future me: It might be fun to display the date
+
+            holder.rowBinding.root.setOnClickListener {
+                val directions = HomeFragmentDirections.actionHomeFragmentToReviewGameFragment(
+                    game.firestoreID
+                )
+                navController.navigate(directions)
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val rowBinding = FragmentGameRowBinding.inflate(LayoutInflater.from(parent.context),
             parent, false)
+
         return VH(rowBinding)
     }
 

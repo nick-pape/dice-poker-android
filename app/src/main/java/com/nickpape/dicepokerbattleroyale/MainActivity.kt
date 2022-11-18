@@ -14,6 +14,8 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import com.nickpape.dicepokerbattleroyale.databinding.ActivityMainBinding
+import com.nickpape.dicepokerbattleroyale.fragments.GameFragmentDirections
+import com.nickpape.dicepokerbattleroyale.fragments.HomeFragmentDirections
 
 class MainActivity : AppCompatActivity() {
 
@@ -66,7 +68,11 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_settings -> {
+                val directions = HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
+                findNavController(R.id.nav_host_fragment_content_main).navigate(directions)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
