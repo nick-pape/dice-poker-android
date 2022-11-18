@@ -14,6 +14,22 @@
         <action
             android:id="@+id/action_HomeFragment_to_CreateGameFragment"
             app:destination="@id/CreateGameFragment" />
+
+        <action
+            android:id="@+id/action_HomeFragment_to_SettingsFragment"
+            app:destination="@id/SettingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SettingsFragment"
+        android:name="com.nickpape.dicepokerbattleroyale.fragments.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings">
+
+        <action
+            android:id="@+id/action_SettingsFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
+
     </fragment>
 
     <fragment
@@ -23,18 +39,34 @@
         tools:layout="@layout/fragment_create_game">
 
         <action
-            android:id="@+id/action_CreateGameFragment_to_PlayGameFragment"
-            app:destination="@id/PlayGameFragment" />
+            android:id="@+id/action_CreateGameFragment_to_ReviewGameFragment"
+            app:destination="@id/ReviewGameFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/ReviewGameFragment"
+        android:name="com.nickpape.dicepokerbattleroyale.fragments.ReviewGameFragment"
+        android:label="Game Review"
+        tools:layout="@layout/fragment_review_game">
+
+        <action
+            android:id="@+id/action_ReviewGameFragment_to_PlayGameFragment"
+            app:destination="@id/PlayGameFragment" />
+
+        <action
+            android:id="@+id/action_ReviewGameFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/PlayGameFragment"
         android:name="com.nickpape.dicepokerbattleroyale.fragments.GameFragment"
-        android:label="Your Game"
+        android:label="Play"
         tools:layout="@layout/fragment_game">
 
         <action
-            android:id="@+id/action_PlayGameFragment_to_HomeFragment"
-            app:destination="@id/HomeFragment" />
+            android:id="@+id/action_PlayGameFragment_to_ReviewGameFragment"
+            app:destination="@id/ReviewGameFragment" />
     </fragment>
 </navigation>

@@ -53,7 +53,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         /*binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_PlayGameFragment_to_HomeFragment)
+            findNavController().navigate(R.id.action_PlayGameFragment_to_ReviewGameFragment)
         }*/
     }
 
