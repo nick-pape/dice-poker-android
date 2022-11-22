@@ -1,5 +1,9 @@
 package com.nickpape.dicepokerbattleroyale.models
 
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.ServerTimestamp
+
 data class ScoreSheet(
     var ones: Int? = null,
     var twos: Int? = null,
@@ -14,8 +18,35 @@ data class ScoreSheet(
     var smallStraight: Int? = null,
     var largeStraight: Int? = null,
     var yahtzee: Int? = null,
-    var chance: Int? = null
+    var chance: Int? = null,
+    @DocumentId var id: String = "",
+    @ServerTimestamp val timeStamp: Timestamp? = null
 ) {
+    fun getUpperScore(): Int {
+        val rawUpper = (ones ?: 0)
+            + (twos ?: 0)
+            + (threes ?: 0)
+            + (fours ?: 0)
+            + (fives ?: 0)
+            + (sixes ?: 0)
+
+        return rawUpper + if (rawUpper >= 63) { 35 } else { 0 }
+    }
+
+    fun getLowerScore(): Int {
+        return (threeOfKind ?: 0)
+            + (fourOfKind ?: 0)
+            + (fullHouse ?: 0)
+            + (smallStraight ?: 0)
+            + (largeStraight ?: 0)
+            + (yahtzee ?: 0)
+            + (chance ?: 0)
+    }
+
+    fun getScore(): Int {
+        return getUpperScore() + getLowerScore()
+    }
+
     companion object {
         private fun getUpperScore(dice: List<Int>, value: Int): Int {
             return dice.filter { it == value }.sum()

@@ -49,7 +49,6 @@ class MainViewModel: ViewModel() {
     fun getNewGame(): LiveData<String> {
         return _newGame
     }
-
     // ===========================================================
 
     // =================== Players ==========================

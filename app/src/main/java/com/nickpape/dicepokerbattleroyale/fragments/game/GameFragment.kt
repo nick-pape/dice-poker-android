@@ -5,54 +5,46 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nickpape.dicepokerbattleroyale.adapters.Player
+import com.nickpape.dicepokerbattleroyale.adapters.PlayerScore
 import com.nickpape.dicepokerbattleroyale.adapters.PlayerChipAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentGameBinding
+import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
 class GameFragment : Fragment() {
-
     private var _binding: FragmentGameBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    private val mainViewModel: MainViewModel by activityViewModels()
+    private val viewModel: GameViewModel by activityViewModels()
+
+    private val args by navArgs<GameFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentGameBinding.inflate(inflater, container, false)
 
         val adapter = PlayerChipAdapter()
         binding.playerChips.adapter = adapter
         binding.playerChips.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
 
-        adapter.submitList(listOf(
-            Player("Nick", 123),
-            Player("Katie", 420),
-            Player("Dustin", 69),
-            Player("Player 1", 1),
-            Player("Player 2", 2),
-            Player("Player 3", 3),
-            Player("Player 4", 4),
-            Player("Player 5", 5),
-            Player("Player 6", 6)
-        ))
+        viewModel.playerScores().observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
+        viewModel.selectPlayer(
+            mainViewModel.firebaseAuthLiveData.getCurrentUser()!!.uid
+        )
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        /*binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_PlayGameFragment_to_ReviewGameFragment)
-        }*/
     }
 
     override fun onDestroyView() {

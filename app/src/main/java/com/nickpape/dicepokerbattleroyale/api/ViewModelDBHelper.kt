@@ -13,6 +13,26 @@ class ViewModelDBHelper {
 
     private val gameCollection = "allGames"
     private val playerCollection = "allPlayers"
+    private val scoresheetsCollection = "scoresheets"
+
+    fun fetchAllScoreSheets(gameId: String, scoresheets: MutableLiveData<HashMap<String, ScoreSheet>>) {
+        db.collection(gameCollection).document(gameId).collection(scoresheetsCollection)
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d(javaClass.simpleName, "Fetched scoresheets for $gameId")
+
+                val resultMap = HashMap<String, ScoreSheet>()
+                result.documents.forEach {
+                    val scoresheet = it.toObject(ScoreSheet::class.java)!!
+                    resultMap[scoresheet.id] = scoresheet
+                }
+
+                scoresheets.postValue(resultMap)
+            }
+            .addOnFailureListener {
+                Log.d(javaClass.simpleName, "FAILED fetch scoresheets for $gameId")
+            }
+    }
 
     fun fetchAllGames(gamesList: MutableLiveData<List<Game>>) {
         db.collection(gameCollection)
@@ -56,7 +76,7 @@ class ViewModelDBHelper {
 
     fun createNewGame(newGame: MutableLiveData<String>, playerIds: Set<String>) {
         val gameRef = db.collection(gameCollection).document()
-        val collectionRef = gameRef.collection("scoresheets")
+        val collectionRef = gameRef.collection(scoresheetsCollection)
 
         db.runTransaction { batch ->
             batch.set(gameRef, Game())

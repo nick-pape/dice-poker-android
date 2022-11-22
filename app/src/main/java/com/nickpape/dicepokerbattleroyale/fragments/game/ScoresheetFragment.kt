@@ -69,7 +69,7 @@ class ScoresheetFragment : Fragment() {
         binding.chance.diceScoreText.text = "Chance"
 
         viewModel.observePotentialScores().observe(viewLifecycleOwner) {
-            val playerScoreSheet = viewModel.playerScoreSheet.value!!
+            val playerScoreSheet = viewModel.playerScoreSheet().value ?: return@observe
 
             setPotentialScore(playerScoreSheet::ones, it.ones, binding.scoreOne)
             setPotentialScore(playerScoreSheet::twos, it.twos, binding.scoreTwo)
@@ -106,9 +106,11 @@ class ScoresheetFragment : Fragment() {
             scoreBinding.scoreText.setOnClickListener {
                 field.setter.call(potentialScore)
 
-                viewModel.playerScoreSheet.postValue(
-                    viewModel.playerScoreSheet.value
-                )
+                // TODO
+                //viewModel.playerScoreSheet().postValue(
+                //    viewModel.playerScoreSheet.value
+                //)
+
                 viewModel.resetDice()
             }
         } else {

@@ -74,6 +74,10 @@
         android:label="Play"
         tools:layout="@layout/fragment_game">
 
+        <argument
+            android:name="gameId"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_PlayGameFragment_to_ReviewGameFragment"
             app:destination="@id/ReviewGameFragment" />

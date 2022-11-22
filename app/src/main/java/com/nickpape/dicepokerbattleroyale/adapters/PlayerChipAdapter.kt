@@ -1,5 +1,6 @@
 package com.nickpape.dicepokerbattleroyale.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -10,16 +11,24 @@ import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentPlayerChipBinding
 
-data class Player(val name: String, val score: Int)
+data class PlayerScore(val name: String, val score: Int, val selected: Boolean)
 
-class PlayerChipAdapter : ListAdapter<Player, PlayerChipAdapter.VH>(PlayerDiff()) {
+class PlayerChipAdapter : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerDiff()) {
 
     // ViewHolder pattern
     inner class VH(val playerChipBinding: FragmentPlayerChipBinding)
         : RecyclerView.ViewHolder(playerChipBinding.root) {
 
-        fun bind(playerScore: Player) {
+        fun bind(playerScore: PlayerScore) {
             playerChipBinding.chip.text = playerScore.name
+
+            playerChipBinding.chip.setBackgroundColor(
+                if (playerScore.selected) {
+                    Color.LTGRAY
+                } else {
+                    Color.TRANSPARENT
+                }
+            )
 
             val chip = playerChipBinding.chip
 
@@ -51,12 +60,14 @@ class PlayerChipAdapter : ListAdapter<Player, PlayerChipAdapter.VH>(PlayerDiff()
         holder.bind(this.currentList[position])
     }
 
-    class PlayerDiff : DiffUtil.ItemCallback<Player>() {
-        override fun areItemsTheSame(oldItem: Player, newItem: Player): Boolean {
+    class PlayerDiff : DiffUtil.ItemCallback<PlayerScore>() {
+        override fun areItemsTheSame(oldItem: PlayerScore, newItem: PlayerScore): Boolean {
             return oldItem.name == newItem.name
         }
-        override fun areContentsTheSame(oldItem: Player, newItem: Player): Boolean {
-            return oldItem.name == newItem.name && oldItem.score == newItem.score
+        override fun areContentsTheSame(oldItem: PlayerScore, newItem: PlayerScore): Boolean {
+            return oldItem.name == newItem.name
+                    && oldItem.score == newItem.score
+                    && oldItem.selected == newItem.selected
 
         }
     }
