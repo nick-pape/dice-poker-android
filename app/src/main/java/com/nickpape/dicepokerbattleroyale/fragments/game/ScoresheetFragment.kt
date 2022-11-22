@@ -105,12 +105,7 @@ class ScoresheetFragment : Fragment() {
 
             scoreBinding.scoreText.setOnClickListener {
                 field.setter.call(potentialScore)
-
-                // TODO
-                //viewModel.playerScoreSheet().postValue(
-                //    viewModel.playerScoreSheet.value
-                //)
-
+                viewModel.updateScoresheet()
                 viewModel.resetDice()
             }
         } else {

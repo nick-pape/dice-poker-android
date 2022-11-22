@@ -2,6 +2,7 @@ package com.nickpape.dicepokerbattleroyale.api
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nickpape.dicepokerbattleroyale.models.Game
 import com.nickpape.dicepokerbattleroyale.models.Player
@@ -31,6 +32,20 @@ class ViewModelDBHelper {
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "FAILED fetch scoresheets for $gameId")
+            }
+    }
+
+    fun updateScoreSheet(gameId: String, scoresheet: ScoreSheet, onSuccessListener: OnSuccessListener<Void>) {
+        db.collection(gameCollection)
+            .document(gameId)
+            .collection(scoresheetsCollection)
+            .document(scoresheet.id)
+            .set(scoresheet)
+            .addOnSuccessListener {
+                Log.d(javaClass.simpleName, "Updated scoresheet ${scoresheet.id} for game $gameId")
+            }
+            .addOnFailureListener {
+                Log.d(javaClass.simpleName, "FAILED update scoresheet ${scoresheet.id} for game $gameId")
             }
     }
 

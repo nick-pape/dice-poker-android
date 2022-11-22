@@ -15,7 +15,7 @@ class GameViewModel : ViewModel() {
     // Database access
     private val dbHelp = ViewModelDBHelper()
 
-    private var _playerScoreSheet: LiveData<ScoreSheet>? = null
+    private var _playerScoreSheet: MediatorLiveData<ScoreSheet>? = null
     fun playerScoreSheet(): LiveData<ScoreSheet> {
         if (_playerScoreSheet == null) {
             val result = MediatorLiveData<ScoreSheet>()
@@ -33,8 +33,8 @@ class GameViewModel : ViewModel() {
         return _playerScoreSheet!!
     }
 
-    private var _playerScoreSheets: LiveData<HashMap<String, ScoreSheet>?>? = null
-    fun playerScoreSheets(): LiveData<HashMap<String, ScoreSheet>?> {
+    private var _playerScoreSheets: MediatorLiveData<HashMap<String, ScoreSheet>>? = null
+    fun playerScoreSheets(): LiveData<HashMap<String, ScoreSheet>> {
         if (_playerScoreSheets == null) {
             val result = MediatorLiveData<HashMap<String, ScoreSheet>>()
 
@@ -191,5 +191,11 @@ class GameViewModel : ViewModel() {
 
         playerDice.value = newDice
         diceCount.value = diceCount.value?.plus(1)
+    }
+
+    fun updateScoresheet() {
+        dbHelp.updateScoreSheet(_gameId.value!!, _playerScoreSheet!!.value!!) {
+            _playerScoreSheets!!.postValue(_playerScoreSheets!!.value)
+        }
     }
 }

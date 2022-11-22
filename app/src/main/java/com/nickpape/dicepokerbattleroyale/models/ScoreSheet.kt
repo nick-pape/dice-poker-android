@@ -23,24 +23,23 @@ data class ScoreSheet(
     @ServerTimestamp val timeStamp: Timestamp? = null
 ) {
     fun getUpperScore(): Int {
-        val rawUpper = (ones ?: 0)
-            + (twos ?: 0)
-            + (threes ?: 0)
-            + (fours ?: 0)
-            + (fives ?: 0)
-            + (sixes ?: 0)
-
+        val rawUpper = (ones ?: 0) +
+                (twos ?: 0) +
+                (threes ?: 0) +
+                (fours ?: 0) +
+                (fives ?: 0) +
+                (sixes ?: 0)
         return rawUpper + if (rawUpper >= 63) { 35 } else { 0 }
     }
 
     fun getLowerScore(): Int {
-        return (threeOfKind ?: 0)
-            + (fourOfKind ?: 0)
-            + (fullHouse ?: 0)
-            + (smallStraight ?: 0)
-            + (largeStraight ?: 0)
-            + (yahtzee ?: 0)
-            + (chance ?: 0)
+        return (threeOfKind ?: 0) +
+            (fourOfKind ?: 0) +
+            (fullHouse ?: 0) +
+            (smallStraight ?: 0) +
+            (largeStraight ?: 0) +
+            (yahtzee ?: 0) +
+            (chance ?: 0)
     }
 
     fun getScore(): Int {
