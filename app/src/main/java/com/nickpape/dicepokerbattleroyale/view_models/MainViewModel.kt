@@ -1,6 +1,8 @@
 package com.nickpape.dicepokerbattleroyale.view_models
 
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.nickpape.dicepokerbattleroyale.api.ViewModelDBHelper
@@ -40,20 +42,44 @@ class MainViewModel: ViewModel() {
     // ===========================================================
 
     // =================== Players ==========================
+    data class PlayerSelection(
+        val player: Player,
+        var isSelected: Boolean = false
+    )
+
     private var _players = MutableLiveData<List<Player>>()
 
-    private var _selectedPlayers = MutableLiveData<HashSet<String>>()
+    private var _selectedPlayers = MutableLiveData(HashSet<String>())
 
     fun fetchAllPlayers() {
         dbHelp.fetchAllPlayers(_players)
     }
 
-    fun players(): LiveData<List<Player>> {
-        return _players
-    }
+    private var _playerSelections: LiveData<List<PlayerSelection>>? = null
+    fun players(): LiveData<List<PlayerSelection>> {
+        if (_playerSelections == null) {
+            val playerSelections = MediatorLiveData<List<PlayerSelection>>()
+            playerSelections.addSource(_players) { players ->
+                playerSelections.postValue(players.map { player ->
+                    PlayerSelection(player)
+                })
+            }
 
-    fun isSelected(player: Player): Boolean {
-        return _selectedPlayers.value!!.contains(player.id)
+            playerSelections.addSource(_selectedPlayers) { selectedPlayers ->
+                if (playerSelections.value !== null) {
+                    playerSelections.value!!.forEach {
+                        Log.d(javaClass.simpleName,"Is ${it.player.id} selected? ${selectedPlayers.contains(it.player.id)}")
+
+                        it.isSelected = selectedPlayers.contains(it.player.id)
+                    }
+                    playerSelections.postValue(playerSelections.value!!)
+                }
+            }
+
+            _playerSelections = playerSelections
+        }
+
+        return _playerSelections!!
     }
 
     fun toggleSelectPlayer(player: Player) {
@@ -61,19 +87,19 @@ class MainViewModel: ViewModel() {
         val key = player.id
         if (selectedPlayersSet.contains(key)) {
             selectedPlayersSet.remove(key)
+            Log.d(javaClass.simpleName, "Unselected player $key")
         } else {
             selectedPlayersSet.add(key)
+            Log.d(javaClass.simpleName, "Selected player $key")
         }
-        _selectedPlayers.postValue(selectedPlayersSet)
-    }
-
-    fun resetSelectedPlayers() {
-        _selectedPlayers.postValue(HashSet<String>())
+        _selectedPlayers.value = selectedPlayersSet
     }
 
     // Get a note from the memory cache
-    fun getPlayer(position: Int) : Player {
-        val player = _players.value?.get(position)
+    fun getPlayer(position: Int) : PlayerSelection {
+        Log.d(javaClass.simpleName, "Getting player at ${position}")
+
+        val player = players().value?.get(position)
         return player!!
     }
 
