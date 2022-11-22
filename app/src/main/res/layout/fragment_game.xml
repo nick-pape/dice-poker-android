@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".ContentMain"
-        android:name="com.nickpape.dicepokerbattleroyale.fragments.home.DiceRollFragment"
+        android:name="com.nickpape.dicepokerbattleroyale.fragments.game.DiceRollFragment"
         tools:layout="@layout/fragment_dice_roll"
         app:layout_constraintTop_toBottomOf="@id/scoresheet_container"
         app:layout_constraintBottom_toBottomOf="parent"
