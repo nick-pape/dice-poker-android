@@ -39,6 +39,17 @@ class MainViewModel: ViewModel() {
         val game = _games.value?.get(position)
         return game!!
     }
+
+    private var _newGame = MutableLiveData<String>()
+
+    fun createGame(playerIds: Set<String>) {
+        dbHelp.createNewGame(_newGame, playerIds)
+    }
+
+    fun getNewGame(): LiveData<String> {
+        return _newGame
+    }
+
     // ===========================================================
 
     // =================== Players ==========================
@@ -50,6 +61,9 @@ class MainViewModel: ViewModel() {
     private var _players = MutableLiveData<List<Player>>()
 
     private var _selectedPlayers = MutableLiveData(HashSet<String>())
+    fun selectedPlayers(): LiveData<HashSet<String>> {
+        return _selectedPlayers
+    }
 
     fun fetchAllPlayers() {
         dbHelp.fetchAllPlayers(_players)
@@ -107,6 +121,9 @@ class MainViewModel: ViewModel() {
         dbHelp.addOrUpdatePlayer(player)
     }
     // ===========================================================
+
+
+
 
     // =================== Score Sheets ==========================
     private var _scoresheets = MutableLiveData<HashMap<String, ScoreSheet>>()

@@ -44,6 +44,22 @@ class CreateGameFragment : Fragment() {
 
         viewModel.fetchAllPlayers()
 
+        binding.cancelButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.createGameButton.setOnClickListener {
+            viewModel.getNewGame().observe(viewLifecycleOwner) {
+                // TODO -- remove this frame from backstack
+                val directions = CreateGameFragmentDirections.actionCreateGameFragmentToReviewGameFragment(it)
+                findNavController().navigate(directions)
+            }
+
+            viewModel.createGame(
+                viewModel.selectedPlayers().value!!
+            )
+        }
+
         return binding.root
     }
 

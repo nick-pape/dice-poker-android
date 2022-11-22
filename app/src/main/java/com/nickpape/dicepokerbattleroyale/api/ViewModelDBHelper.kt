@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nickpape.dicepokerbattleroyale.models.Game
 import com.nickpape.dicepokerbattleroyale.models.Player
+import com.nickpape.dicepokerbattleroyale.models.ScoreSheet
 
 class ViewModelDBHelper {
 
@@ -51,5 +52,23 @@ class ViewModelDBHelper {
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "FAILED to add player ${player.id} ${player.display_name}")
             }
+    }
+
+    fun createNewGame(newGame: MutableLiveData<String>, playerIds: Set<String>) {
+        val gameRef = db.collection(gameCollection).document()
+        val collectionRef = gameRef.collection("scoresheets")
+
+        db.runTransaction { batch ->
+            batch.set(gameRef, Game())
+            val scoresheetRefs = playerIds.forEach { playerId ->
+                val scoresheetRef = collectionRef.document(playerId)
+                batch.set(scoresheetRef, ScoreSheet())
+            }
+        }.addOnCompleteListener {
+            Log.d(javaClass.simpleName, "Created game ${gameRef.id}")
+            newGame.postValue(gameRef.id)
+        }.addOnFailureListener {
+            Log.d(javaClass.simpleName, "FAILED create game ${gameRef.id}")
+        }
     }
 }
