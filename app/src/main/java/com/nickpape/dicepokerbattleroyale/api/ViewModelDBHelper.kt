@@ -4,12 +4,14 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nickpape.dicepokerbattleroyale.models.Game
+import com.nickpape.dicepokerbattleroyale.models.Player
 
 class ViewModelDBHelper {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     private val gameCollection = "allGames"
+    private val playerCollection = "allPlayers"
 
     fun fetchAllGames(gamesList: MutableLiveData<List<Game>>) {
         db.collection(gameCollection)
@@ -23,6 +25,21 @@ class ViewModelDBHelper {
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "allGames fetch FAILED ", it)
+            }
+    }
+
+    fun fetchAllPlayers(playersList: MutableLiveData<List<Player>>) {
+        db.collection(playerCollection)
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d(javaClass.simpleName, "allPlayers fetch ${result!!.documents.size}")
+                // NB: This is done on a background thread
+                playersList.postValue(result.documents.mapNotNull {
+                    it.toObject(Player::class.java)
+                })
+            }
+            .addOnFailureListener {
+                Log.d(javaClass.simpleName, "allPlayers fetch FAILED ", it)
             }
     }
 }

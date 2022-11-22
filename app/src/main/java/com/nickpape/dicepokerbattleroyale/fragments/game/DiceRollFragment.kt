@@ -17,11 +17,6 @@ import com.nickpape.dicepokerbattleroyale.models.DiceRoll
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceRollBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DiceRollFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DiceRollFragment : Fragment() {
 
     private val viewModel: GameViewModel by activityViewModels()

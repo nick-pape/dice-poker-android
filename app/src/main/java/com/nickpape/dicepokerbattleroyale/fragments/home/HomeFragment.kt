@@ -14,18 +14,11 @@ import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.adapters.GameListAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentHomeBinding
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class HomeFragment : Fragment() {
-
     private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: MainViewModel by activityViewModels()
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +40,6 @@ class HomeFragment : Fragment() {
         viewModel.fetchAllGames()
 
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
