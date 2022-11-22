@@ -24,5 +24,4 @@ class CreateGameFragment : Fragment() {
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
         // TODO: Use the ViewModel
     }
-
 }
