@@ -1,6 +1,6 @@
 package com.nickpape.dicepokerbattleroyale.adapters
 
-import com.nickpape.dicepokerbattleroyale.MainViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

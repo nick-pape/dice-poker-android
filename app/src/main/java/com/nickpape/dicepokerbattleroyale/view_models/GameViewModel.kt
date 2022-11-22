@@ -113,7 +113,7 @@ data class ScoreSheet(
     }
 }
 
-class CreateGameViewModel : ViewModel() {
+class GameViewModel : ViewModel() {
     public val playerScoreSheet = MutableLiveData(ScoreSheet())
 
     fun isGameOver(): LiveData<Boolean> {

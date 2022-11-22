@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nickpape.dicepokerbattleroyale.MainViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.adapters.GameListAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentHomeBinding

@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.nickpape.dicepokerbattleroyale.view_models.CreateGameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
 import com.nickpape.dicepokerbattleroyale.R
 
 class CreateGameFragment : Fragment() {
@@ -15,7 +15,7 @@ class CreateGameFragment : Fragment() {
         fun newInstance() = CreateGameFragment()
     }
 
-    private lateinit var viewModel: CreateGameViewModel
+    private lateinit var viewModel: GameViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +26,7 @@ class CreateGameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[CreateGameViewModel::class.java]
+        viewModel = ViewModelProvider(this)[GameViewModel::class.java]
         // TODO: Use the ViewModel
     }
 

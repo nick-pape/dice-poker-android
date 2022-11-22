@@ -15,6 +15,7 @@ import androidx.activity.viewModels
 import com.nickpape.dicepokerbattleroyale.auth.AuthInit
 import com.nickpape.dicepokerbattleroyale.databinding.ActivityMainBinding
 import com.nickpape.dicepokerbattleroyale.fragments.home.HomeFragmentDirections
+import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 

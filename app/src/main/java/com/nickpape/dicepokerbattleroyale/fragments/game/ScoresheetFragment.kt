@@ -14,7 +14,7 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.nickpape.dicepokerbattleroyale.view_models.CreateGameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceScoreBinding
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentScoresheetBinding
@@ -36,7 +36,7 @@ class ScoresheetFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private val viewModel: CreateGameViewModel by activityViewModels()
+    private val viewModel: GameViewModel by activityViewModels()
 
     private var _binding: FragmentScoresheetBinding? = null
     private val binding get() = _binding!!

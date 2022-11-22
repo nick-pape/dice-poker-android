@@ -12,7 +12,7 @@ import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import com.nickpape.dicepokerbattleroyale.view_models.CreateGameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
 import com.nickpape.dicepokerbattleroyale.view_models.DiceRoll
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceRollBinding
@@ -32,7 +32,7 @@ class DiceRollFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private val viewModel: CreateGameViewModel by activityViewModels()
+    private val viewModel: GameViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
