@@ -37,7 +37,8 @@ class GameFragment : Fragment() {
         binding.playerChips.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
 
         viewModel.playerScores().observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            adapter.submitList(it.toList())
+            adapter.notifyDataSetChanged()
         }
 
         viewModel.selectPlayer(

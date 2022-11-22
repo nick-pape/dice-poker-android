@@ -52,13 +52,14 @@ class GameViewModel : ViewModel() {
         if (_playerScores == null) {
             val result = MediatorLiveData<List<PlayerScore>>()
 
-            result.addSource(playerScoreSheets()) {
-                if (it != null) {
-                    result.postValue(it.entries.map { it ->
+            result.addSource(playerScoreSheets()) { scoresheets ->
+                if (scoresheets != null) {
+                    result.postValue(scoresheets.entries.map { scoresheet ->
+                        Log.d(javaClass.simpleName,"Updating player ${scoresheet.key} to ${scoresheet.value.getScore()}")
                         return@map PlayerScore(
-                            it.key,
-                            it.value.getScore(),
-                            it.key == selectedPlayer().value
+                            scoresheet.key,
+                            scoresheet.value.getScore(),
+                            scoresheet.key == selectedPlayer().value
                         )
                     })
                 }
@@ -195,7 +196,10 @@ class GameViewModel : ViewModel() {
 
     fun updateScoresheet() {
         dbHelp.updateScoreSheet(_gameId.value!!, _playerScoreSheet!!.value!!) {
-            _playerScoreSheets!!.postValue(_playerScoreSheets!!.value)
+
+            _playerScoreSheets!!.value = _playerScoreSheets!!.value
+            _playerScoreSheet!!.value = _playerScoreSheet!!.value
+            _gameId.value = _gameId.value
         }
     }
 }

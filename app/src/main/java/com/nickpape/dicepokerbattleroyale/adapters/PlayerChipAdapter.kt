@@ -1,8 +1,10 @@
 package com.nickpape.dicepokerbattleroyale.adapters
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -19,6 +21,8 @@ class PlayerChipAdapter : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerD
     inner class VH(val playerChipBinding: FragmentPlayerChipBinding)
         : RecyclerView.ViewHolder(playerChipBinding.root) {
 
+        var badge: BadgeDrawable? = null
+
         fun bind(playerScore: PlayerScore) {
             playerChipBinding.chip.text = playerScore.name
 
@@ -32,14 +36,25 @@ class PlayerChipAdapter : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerD
 
             val chip = playerChipBinding.chip
 
-            chip.viewTreeObserver.addOnGlobalLayoutListener {
-                val badgeDrawable = BadgeDrawable.create(playerChipBinding.root.context)
-                badgeDrawable.number = playerScore.score
-                badgeDrawable.verticalOffset = 25
-                badgeDrawable.horizontalOffset = 15
-                BadgeUtils.attachBadgeDrawable(badgeDrawable, chip, null)
-                // chip.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            if (badge != null) {
+                Log.d(javaClass.simpleName, "Removing badge")
+                BadgeUtils.detachBadgeDrawable(badge!!, chip)
             }
+
+            badge = BadgeDrawable.create(playerChipBinding.root.context)
+            badge!!.verticalOffset = 25
+            badge!!.horizontalOffset = 15
+            badge!!.number = playerScore.score
+
+            chip.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    BadgeUtils.attachBadgeDrawable(badge!!, chip, null)
+                    chip.viewTreeObserver.removeOnGlobalLayoutListener(this);
+
+                    Log.d(javaClass.simpleName, "Adding badge")
+                }
+            })
+
 
             chip.setOnClickListener {
                 // TODO - this should switch to selected player's scoresheet
@@ -62,7 +77,7 @@ class PlayerChipAdapter : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerD
 
     class PlayerDiff : DiffUtil.ItemCallback<PlayerScore>() {
         override fun areItemsTheSame(oldItem: PlayerScore, newItem: PlayerScore): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.name == newItem.name && oldItem.score == newItem.score
         }
         override fun areContentsTheSame(oldItem: PlayerScore, newItem: PlayerScore): Boolean {
             return oldItem.name == newItem.name
