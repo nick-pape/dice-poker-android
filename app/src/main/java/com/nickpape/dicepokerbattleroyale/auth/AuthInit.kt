@@ -1,11 +1,11 @@
-package com.nickpape.dicepokerbattleroyale
+package com.nickpape.dicepokerbattleroyale.auth
 
 import android.content.Intent
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
+import com.nickpape.dicepokerbattleroyale.MainViewModel
 
 // https://firebase.google.com/docs/auth/android/firebaseui
 class AuthInit(viewModel: MainViewModel, signInLauncher: ActivityResultLauncher<Intent>) {

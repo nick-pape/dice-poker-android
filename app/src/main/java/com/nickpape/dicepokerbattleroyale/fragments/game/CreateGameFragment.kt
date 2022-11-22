@@ -1,4 +1,4 @@
-package com.nickpape.dicepokerbattleroyale.fragments
+package com.nickpape.dicepokerbattleroyale.fragments.game
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.nickpape.dicepokerbattleroyale.CreateGameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.CreateGameViewModel
 import com.nickpape.dicepokerbattleroyale.R
 
 class CreateGameFragment : Fragment() {

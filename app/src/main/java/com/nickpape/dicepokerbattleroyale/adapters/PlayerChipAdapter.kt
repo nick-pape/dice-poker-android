@@ -1,8 +1,7 @@
-package com.nickpape.dicepokerbattleroyale
+package com.nickpape.dicepokerbattleroyale.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter

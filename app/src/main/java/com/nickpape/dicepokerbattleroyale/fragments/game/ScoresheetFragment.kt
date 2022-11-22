@@ -1,25 +1,21 @@
-package com.nickpape.dicepokerbattleroyale.fragments
+package com.nickpape.dicepokerbattleroyale.fragments.game
 
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.Typeface
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.nickpape.dicepokerbattleroyale.CreateGameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.CreateGameViewModel
 import com.nickpape.dicepokerbattleroyale.R
-import com.nickpape.dicepokerbattleroyale.ScoreSheet
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceScoreBinding
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentScoresheetBinding
 

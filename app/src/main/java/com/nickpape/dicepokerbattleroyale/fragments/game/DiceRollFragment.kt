@@ -1,7 +1,6 @@
-package com.nickpape.dicepokerbattleroyale.fragments
+package com.nickpape.dicepokerbattleroyale.fragments.game
 
 import android.content.res.Configuration
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
@@ -13,11 +12,10 @@ import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import com.nickpape.dicepokerbattleroyale.CreateGameViewModel
-import com.nickpape.dicepokerbattleroyale.DiceRoll
+import com.nickpape.dicepokerbattleroyale.view_models.CreateGameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.DiceRoll
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceRollBinding
-import com.nickpape.dicepokerbattleroyale.databinding.FragmentScoresheetBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

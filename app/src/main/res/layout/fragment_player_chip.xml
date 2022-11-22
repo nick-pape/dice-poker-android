@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".PlayerChipFragment">
+    tools:context=".fragments.game.PlayerChipFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <com.google.android.material.chip.Chip

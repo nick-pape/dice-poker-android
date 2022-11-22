@@ -1,4 +1,4 @@
-package com.nickpape.dicepokerbattleroyale.fragments
+package com.nickpape.dicepokerbattleroyale.adapters
 
 import com.nickpape.dicepokerbattleroyale.MainViewModel
 
@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nickpape.dicepokerbattleroyale.models.Game
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentGameRowBinding
+import com.nickpape.dicepokerbattleroyale.fragments.home.HomeFragmentDirections
 
 class GameListAdapter(private val viewModel: MainViewModel, private val navController: NavController)
     : ListAdapter<Game, GameListAdapter.VH>(Diff()) {

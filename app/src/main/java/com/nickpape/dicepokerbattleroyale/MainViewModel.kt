@@ -3,6 +3,8 @@ package com.nickpape.dicepokerbattleroyale
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.nickpape.dicepokerbattleroyale.api.ViewModelDBHelper
+import com.nickpape.dicepokerbattleroyale.auth.FirestoreAuthLiveData
 import com.nickpape.dicepokerbattleroyale.models.Game
 
 class MainViewModel: ViewModel() {

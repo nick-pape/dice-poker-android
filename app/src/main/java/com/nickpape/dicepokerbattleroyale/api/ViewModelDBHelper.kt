@@ -1,4 +1,4 @@
-package com.nickpape.dicepokerbattleroyale
+package com.nickpape.dicepokerbattleroyale.api
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

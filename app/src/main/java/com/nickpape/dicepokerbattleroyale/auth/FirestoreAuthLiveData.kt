@@ -1,4 +1,4 @@
-package com.nickpape.dicepokerbattleroyale
+package com.nickpape.dicepokerbattleroyale.auth
 
 import androidx.lifecycle.LiveData
 import com.google.firebase.auth.FirebaseAuth

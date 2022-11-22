@@ -1,15 +1,13 @@
-package com.nickpape.dicepokerbattleroyale.fragments
+package com.nickpape.dicepokerbattleroyale.fragments.game
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nickpape.dicepokerbattleroyale.Player
-import com.nickpape.dicepokerbattleroyale.PlayerChipAdapter
-import com.nickpape.dicepokerbattleroyale.R
+import com.nickpape.dicepokerbattleroyale.adapters.Player
+import com.nickpape.dicepokerbattleroyale.adapters.PlayerChipAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentGameBinding
 
 /**

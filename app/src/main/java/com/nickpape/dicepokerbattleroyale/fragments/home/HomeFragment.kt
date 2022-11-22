@@ -1,4 +1,4 @@
-package com.nickpape.dicepokerbattleroyale.fragments
+package com.nickpape.dicepokerbattleroyale.fragments.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nickpape.dicepokerbattleroyale.MainViewModel
 import com.nickpape.dicepokerbattleroyale.R
+import com.nickpape.dicepokerbattleroyale.adapters.GameListAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentHomeBinding
 
 /**

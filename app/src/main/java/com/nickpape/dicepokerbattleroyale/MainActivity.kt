@@ -1,7 +1,6 @@
 package com.nickpape.dicepokerbattleroyale
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import android.app.Activity
 import androidx.activity.result.contract.ActivityResultContracts
 import android.util.Log
@@ -13,9 +12,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import com.nickpape.dicepokerbattleroyale.auth.AuthInit
 import com.nickpape.dicepokerbattleroyale.databinding.ActivityMainBinding
-import com.nickpape.dicepokerbattleroyale.fragments.GameFragmentDirections
-import com.nickpape.dicepokerbattleroyale.fragments.HomeFragmentDirections
+import com.nickpape.dicepokerbattleroyale.fragments.home.HomeFragmentDirections
 
 class MainActivity : AppCompatActivity() {
 

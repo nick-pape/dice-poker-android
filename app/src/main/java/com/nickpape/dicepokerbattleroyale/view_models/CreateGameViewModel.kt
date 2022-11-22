@@ -1,4 +1,4 @@
-package com.nickpape.dicepokerbattleroyale
+package com.nickpape.dicepokerbattleroyale.view_models
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData

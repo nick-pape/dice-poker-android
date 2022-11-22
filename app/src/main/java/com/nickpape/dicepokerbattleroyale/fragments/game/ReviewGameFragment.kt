@@ -1,4 +1,4 @@
-package com.nickpape.dicepokerbattleroyale.fragments
+package com.nickpape.dicepokerbattleroyale.fragments.game
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
