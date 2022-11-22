@@ -15,14 +15,13 @@ class PlayerSelectorAdapter(private val viewModel: MainViewModel)
     // This class allows the adapter to compute what has changed
     class Diff : DiffUtil.ItemCallback<Player>() {
         override fun areItemsTheSame(oldItem: Player, newItem: Player): Boolean {
-            return oldItem.firestoreID == newItem.firestoreID
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Player, newItem: Player): Boolean {
-            return oldItem.firestoreID == newItem.firestoreID
+            return oldItem.id == newItem.id
                     && oldItem.timeStamp == newItem.timeStamp
                     && oldItem.display_name == newItem.display_name
-                    && oldItem.firestoreID == newItem.firestoreID
         }
     }
 

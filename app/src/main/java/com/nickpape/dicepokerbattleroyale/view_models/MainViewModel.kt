@@ -53,12 +53,12 @@ class MainViewModel: ViewModel() {
     }
 
     fun isSelected(player: Player): Boolean {
-        return _selectedPlayers.value!!.contains(player.firebase_id)
+        return _selectedPlayers.value!!.contains(player.id)
     }
 
     fun toggleSelectPlayer(player: Player) {
         val selectedPlayersSet = _selectedPlayers.value!!
-        val key = player.firebase_id
+        val key = player.id
         if (selectedPlayersSet.contains(key)) {
             selectedPlayersSet.remove(key)
         } else {
