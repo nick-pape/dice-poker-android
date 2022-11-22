@@ -10,11 +10,6 @@ import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
 import com.nickpape.dicepokerbattleroyale.R
 
 class CreateGameFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = CreateGameFragment()
-    }
-
     private lateinit var viewModel: GameViewModel
 
     override fun onCreateView(

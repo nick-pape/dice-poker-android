@@ -33,6 +33,7 @@ class PlayerChipAdapter : ListAdapter<Player, PlayerChipAdapter.VH>(PlayerDiff()
             }
 
             chip.setOnClickListener {
+                // TODO - this should switch to selected player's scoresheet
                 Toast.makeText(chip.context, "Clicked on player ${playerScore.name}", Toast.LENGTH_LONG).show()
             }
         }
