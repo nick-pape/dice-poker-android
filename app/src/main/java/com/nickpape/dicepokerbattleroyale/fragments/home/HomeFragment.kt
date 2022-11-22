@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
         val itemDecor = DividerItemDecoration(binding.gamesList.context, LinearLayoutManager.VERTICAL)
         binding.gamesList.addItemDecoration(itemDecor)
 
-        viewModel.observeGamesList().observe(viewLifecycleOwner) {
+        viewModel.games().observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 

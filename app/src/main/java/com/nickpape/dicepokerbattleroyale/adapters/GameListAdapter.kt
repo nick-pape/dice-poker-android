@@ -31,7 +31,7 @@ class GameListAdapter(private val viewModel: MainViewModel, private val navContr
 
         fun bind(holder: VH, position: Int) {
             val game = viewModel.getGame(position)
-            holder.rowBinding.playerNames.text = game.players.joinToString()
+            holder.rowBinding.playerNames.text = game.player_scoresheets.joinToString()
             // Note to future me: It might be fun to display the date
 
             holder.rowBinding.root.setOnClickListener {
