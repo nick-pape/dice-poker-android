@@ -42,4 +42,14 @@ class ViewModelDBHelper {
                 Log.d(javaClass.simpleName, "allPlayers fetch FAILED ", it)
             }
     }
+
+    fun addOrUpdatePlayer(player: Player) {
+        db.collection(playerCollection).document(player.id).set(player)
+            .addOnSuccessListener {
+                Log.d(javaClass.simpleName, "added player ${player.id} ${player.display_name}")
+            }
+            .addOnFailureListener {
+                Log.d(javaClass.simpleName, "FAILED to add player ${player.id} ${player.display_name}")
+            }
+    }
 }

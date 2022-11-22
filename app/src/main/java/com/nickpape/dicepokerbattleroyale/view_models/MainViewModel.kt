@@ -14,7 +14,7 @@ class MainViewModel: ViewModel() {
     private val dbHelp = ViewModelDBHelper()
 
     // ================= User Authentication =====================
-    private var firebaseAuthLiveData = FirestoreAuthLiveData()
+    var firebaseAuthLiveData = FirestoreAuthLiveData()
     fun updateUser() {
         firebaseAuthLiveData.updateUser()
     }
@@ -75,6 +75,10 @@ class MainViewModel: ViewModel() {
     fun getPlayer(position: Int) : Player {
         val player = _players.value?.get(position)
         return player!!
+    }
+
+    fun addOrUpdatePlayer(player: Player) {
+        dbHelp.addOrUpdatePlayer(player)
     }
     // ===========================================================
 
