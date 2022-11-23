@@ -12,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentPlayerChipBinding
+import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
 
-data class PlayerScore(val name: String, val score: Int, val selected: Boolean)
+data class PlayerScore(val id: String, val name: String, val score: Int, val selected: Boolean)
 
-class PlayerChipAdapter : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerDiff()) {
+class PlayerChipAdapter(val viewModel: GameViewModel) : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerDiff()) {
 
     // ViewHolder pattern
     inner class VH(val playerChipBinding: FragmentPlayerChipBinding)
@@ -57,8 +58,8 @@ class PlayerChipAdapter : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerD
 
 
             chip.setOnClickListener {
-                // TODO - this should switch to selected player's scoresheet
-                Toast.makeText(chip.context, "Clicked on player ${playerScore.name}", Toast.LENGTH_LONG).show()
+                viewModel.selectPlayer(playerScore.id)
+                Toast.makeText(chip.context, "Switched to ${playerScore.name}'s Score Sheet", Toast.LENGTH_SHORT).show()
             }
         }
     }

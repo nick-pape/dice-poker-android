@@ -12,6 +12,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
 import com.nickpape.dicepokerbattleroyale.auth.AuthInit
 import com.nickpape.dicepokerbattleroyale.databinding.ActivityMainBinding
 import com.nickpape.dicepokerbattleroyale.fragments.home.HomeFragmentDirections
@@ -78,6 +80,16 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> {
                 val directions = HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
                 findNavController(R.id.nav_host_fragment_content_main).navigate(directions)
+                true
+            }
+            R.id.action_logout -> {
+                Log.d(javaClass.simpleName, "Logout button clickedS")
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        FirebaseAuth.getInstance().signOut()
+                        AuthInit(mainViewModel, signInLauncher)
+                    }
                 true
             }
             else -> super.onOptionsItemSelected(item)

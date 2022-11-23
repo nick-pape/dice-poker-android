@@ -60,6 +60,7 @@ class GameViewModel : ViewModel() {
                         Log.d(javaClass.simpleName,"Updating player ${scoresheet.key} to ${scoresheet.value.getScore()}")
                         return@map PlayerScore(
                             scoresheet.key,
+                            scoresheet.key, // TODO - look up player name
                             scoresheet.value.getScore(),
                             scoresheet.key == selectedPlayer().value
                         )
@@ -80,8 +81,6 @@ class GameViewModel : ViewModel() {
     fun selectPlayer(playerId: String) {
         _selectedPlayer.postValue(playerId)
     }
-
-
 
     val _gameId: MutableLiveData<String> = MutableLiveData()
     fun setGameId(gameId: String) {

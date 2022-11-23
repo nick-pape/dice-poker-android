@@ -32,7 +32,7 @@ class GameFragment : Fragment() {
     ): View? {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
 
-        val adapter = PlayerChipAdapter()
+        val adapter = PlayerChipAdapter(viewModel)
         binding.playerChips.adapter = adapter
         binding.playerChips.layoutManager = LinearLayoutManager(binding.root.context, LinearLayoutManager.HORIZONTAL, false)
 
@@ -44,6 +44,15 @@ class GameFragment : Fragment() {
         viewModel.selectPlayer(
             mainViewModel.firebaseAuthLiveData.getCurrentUser()!!.uid
         )
+
+        viewModel.selectedPlayer().observe(viewLifecycleOwner) {
+            if (it == mainViewModel.firebaseAuthLiveData.getCurrentUser()!!.uid) {
+                // TODO
+                binding.rollDiceContainer.visibility = View.VISIBLE
+            } else {
+                binding.rollDiceContainer.visibility = View.GONE
+            }
+        }
 
         return binding.root
     }

@@ -1,11 +1,13 @@
 package com.nickpape.dicepokerbattleroyale.fragments.game
 
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,6 +70,27 @@ class ScoresheetFragment : Fragment() {
         binding.yahtzeeBonus.diceScoreText.text = "Bonus"
         binding.chance.diceScoreText.text = "Chance"
 
+        viewModel.playerScoreSheet().observe(viewLifecycleOwner) {
+            if (it == null) {
+                return@observe
+            }
+
+            setActualScore(it.ones, binding.scoreOne)
+            setActualScore(it.twos, binding.scoreTwo)
+            setActualScore(it.threes, binding.scoreThree)
+            setActualScore(it.fours, binding.scoreFour)
+            setActualScore(it.fives, binding.scoreFive)
+            setActualScore(it.sixes, binding.scoreSix)
+
+            setActualScore(it.threeOfKind, binding.threeOfAKind)
+            setActualScore(it.fourOfKind, binding.fourOfAKind)
+            setActualScore(it.fullHouse, binding.fullHouse)
+            setActualScore(it.smallStraight, binding.smallStraight)
+            setActualScore(it.largeStraight, binding.largeStraight)
+            setActualScore(it.yahtzee, binding.yahtzee)
+            setActualScore(it.chance, binding.chance)
+        }
+
         viewModel.observePotentialScores().observe(viewLifecycleOwner) {
             val playerScoreSheet = viewModel.playerScoreSheet().value ?: return@observe
 
@@ -87,8 +110,18 @@ class ScoresheetFragment : Fragment() {
             setPotentialScore(playerScoreSheet::chance, it.chance, binding.chance)
         }
 
-
         return binding.root
+    }
+
+    fun setActualScore(
+        score: Int?,
+        scoreBinding: FragmentDiceScoreBinding
+    ) {
+        scoreBinding.scoreText.setOnClickListener(null)
+        scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25F)
+        scoreBinding.scoreText.setTypeface(null, Typeface.NORMAL )
+        scoreBinding.scoreText.paintFlags = scoreBinding.scoreText.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+        scoreBinding.scoreText.text = score?.toString() ?: ""
     }
 
     fun setPotentialScore(
@@ -99,7 +132,7 @@ class ScoresheetFragment : Fragment() {
         if (field.getter.call() == null) {
             scoreBinding.scoreText.text = potentialScore.toString()
 
-            scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18F)
+            scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16F)
             scoreBinding.scoreText.setTypeface(null, Typeface.BOLD_ITALIC)
             scoreBinding.scoreText.paintFlags = scoreBinding.scoreText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
@@ -109,12 +142,7 @@ class ScoresheetFragment : Fragment() {
                 viewModel.resetDice()
             }
         } else {
-            scoreBinding.scoreText.setOnClickListener(null)
-
-            scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25F)
-            scoreBinding.scoreText.setTypeface(null, Typeface.NORMAL )
-            scoreBinding.scoreText.paintFlags = scoreBinding.scoreText.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
-            scoreBinding.scoreText.text = field.getter.call().toString()
+            setActualScore(field.getter.call(), scoreBinding)
         }
     }
 
