@@ -169,9 +169,16 @@ class MainViewModel: ViewModel() {
                 if (scoresheets != null) {
                     result.postValue(scoresheets.entries.map { scoresheet ->
                         Log.d(javaClass.simpleName,"Updating player ${scoresheet.key} to ${scoresheet.value.getScore()}")
+
+                        val displayName = if (scoresheet.key == firebaseAuthLiveData.getCurrentUser()!!.uid) {
+                            "You"
+                        } else {
+                            _players.value!![scoresheet.key]!!.display_name
+                        }
+
                         return@map PlayerScore(
                             scoresheet.key,
-                            scoresheet.key, // TODO - look up player name
+                            displayName,
                             scoresheet.value.getScore(),
                             scoresheet.key == selectedPlayer().value
                         )
