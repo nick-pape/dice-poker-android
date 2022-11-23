@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        val adapter = GameListAdapter(viewModel, findNavController())
+        val adapter = GameListAdapter(viewLifecycleOwner, viewModel, findNavController())
         binding.gamesList.adapter = adapter
         binding.gamesList.layoutManager = LinearLayoutManager(binding.gamesList.context)
         val itemDecor = DividerItemDecoration(binding.gamesList.context, LinearLayoutManager.VERTICAL)

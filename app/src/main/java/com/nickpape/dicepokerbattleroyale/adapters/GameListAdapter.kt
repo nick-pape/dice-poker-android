@@ -1,9 +1,11 @@
 package com.nickpape.dicepokerbattleroyale.adapters
 
+import android.util.Log
 import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,7 +14,7 @@ import com.nickpape.dicepokerbattleroyale.models.Game
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentGameRowBinding
 import com.nickpape.dicepokerbattleroyale.fragments.home.HomeFragmentDirections
 
-class GameListAdapter(private val viewModel: MainViewModel, private val navController: NavController)
+class GameListAdapter(private val viewLifecycleOwner: LifecycleOwner, private val viewModel: MainViewModel, private val navController: NavController)
     : ListAdapter<Game, GameListAdapter.VH>(Diff()) {
     // This class allows the adapter to compute what has changed
     class Diff : DiffUtil.ItemCallback<Game>() {
@@ -32,7 +34,12 @@ class GameListAdapter(private val viewModel: MainViewModel, private val navContr
         fun bind(holder: VH, position: Int) {
             val game = viewModel.getGame(position)
 
-            holder.rowBinding.playerNames.text = "FOO" // TODO - listOf(game.player_scoresheets.keys).joinToString()
+            holder.rowBinding.playerNames.text = game.playerIds.map {
+                val name = viewModel.getPlayerNameFromId(it)
+                Log.d(javaClass.simpleName, "Mapped $it to $name")
+                return@map name
+            }.joinToString()
+
             // Note to future me: It might be fun to display the date
 
             holder.rowBinding.root.setOnClickListener {

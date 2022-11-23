@@ -56,6 +56,7 @@ class ViewModelDBHelper {
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "allGames fetch ${result!!.documents.size}")
                 // NB: This is done on a background thread
+
                 gamesList.postValue(result.documents.mapNotNull {
                     it.toObject(Game::class.java)
                 })
@@ -98,7 +99,7 @@ class ViewModelDBHelper {
         val collectionRef = gameRef.collection(scoresheetsCollection)
 
         db.runTransaction { batch ->
-            batch.set(gameRef, Game())
+            batch.set(gameRef, Game(playerIds = playerIds.toList()))
             val scoresheetRefs = playerIds.forEach { playerId ->
                 val scoresheetRef = collectionRef.document(playerId)
                 batch.set(scoresheetRef, ScoreSheet())

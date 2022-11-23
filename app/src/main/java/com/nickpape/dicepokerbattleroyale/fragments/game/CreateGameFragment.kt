@@ -1,6 +1,5 @@
 package com.nickpape.dicepokerbattleroyale.fragments.game
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,10 +10,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.adapters.PlayerSelectorAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentCreateGameBinding
-import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceRollBinding
 import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 class CreateGameFragment : Fragment() {
@@ -35,7 +32,7 @@ class CreateGameFragment : Fragment() {
         val itemDecor = DividerItemDecoration(binding.playersList.context, LinearLayoutManager.VERTICAL)
         binding.playersList.addItemDecoration(itemDecor)
 
-        viewModel.players().observe(viewLifecycleOwner) {
+        viewModel.playersList().observe(viewLifecycleOwner) {
             Log.d(javaClass.simpleName, "Updating list: $it")
             adapter.submitList(it)
             adapter.notifyDataSetChanged()

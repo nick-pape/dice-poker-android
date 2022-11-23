@@ -70,8 +70,12 @@ class MainViewModel: ViewModel() {
         dbHelp.fetchAllPlayers(_players)
     }
 
+    public fun playersMap(): LiveData<HashMap<String, Player>> {
+        return _players
+    }
+
     private var _playerSelections: LiveData<List<PlayerSelection>>? = null
-    fun players(): LiveData<List<PlayerSelection>> {
+    fun playersList(): LiveData<List<PlayerSelection>> {
         if (_playerSelections == null) {
             val playerSelections = MediatorLiveData<List<PlayerSelection>>()
             playerSelections.addSource(_players) { players ->
@@ -114,7 +118,7 @@ class MainViewModel: ViewModel() {
     fun getPlayer(position: Int) : PlayerSelection {
         Log.d(javaClass.simpleName, "Getting player at ${position}")
 
-        val player = players().value?.get(position)
+        val player = playersList().value?.get(position)
         return player!!
     }
 
@@ -160,6 +164,14 @@ class MainViewModel: ViewModel() {
         return _playerScoreSheets!!
     }
 
+    fun getPlayerNameFromId(playerId: String): String {
+        return if (playerId == firebaseAuthLiveData.getCurrentUser()!!.uid) {
+            "You"
+        } else {
+            playersMap().value!![playerId]!!.display_name
+        }
+    }
+
     private var _playerScores: LiveData<List<PlayerScore>>? = null
     fun playerScores(): LiveData<List<PlayerScore>> {
         if (_playerScores == null) {
@@ -170,15 +182,9 @@ class MainViewModel: ViewModel() {
                     result.postValue(scoresheets.entries.map { scoresheet ->
                         Log.d(javaClass.simpleName,"Updating player ${scoresheet.key} to ${scoresheet.value.getScore()}")
 
-                        val displayName = if (scoresheet.key == firebaseAuthLiveData.getCurrentUser()!!.uid) {
-                            "You"
-                        } else {
-                            _players.value!![scoresheet.key]!!.display_name
-                        }
-
                         return@map PlayerScore(
                             scoresheet.key,
-                            displayName,
+                            getPlayerNameFromId(scoresheet.key),
                             scoresheet.value.getScore(),
                             scoresheet.key == selectedPlayer().value
                         )
