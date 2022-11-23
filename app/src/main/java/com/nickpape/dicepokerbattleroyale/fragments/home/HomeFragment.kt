@@ -38,6 +38,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.fetchAllGames()
+        viewModel.fetchAllPlayers()
 
         return binding.root
     }

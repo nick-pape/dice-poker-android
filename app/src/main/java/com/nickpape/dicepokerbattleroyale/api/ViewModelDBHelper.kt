@@ -65,15 +65,18 @@ class ViewModelDBHelper {
             }
     }
 
-    fun fetchAllPlayers(playersList: MutableLiveData<List<Player>>) {
+    fun fetchAllPlayers(playersList: MutableLiveData<HashMap<String, Player>>) {
         db.collection(playerCollection)
             .get()
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "allPlayers fetch ${result!!.documents.size}")
                 // NB: This is done on a background thread
-                playersList.postValue(result.documents.mapNotNull {
-                    it.toObject(Player::class.java)
-                })
+                val playerMap = HashMap<String, Player>()
+                result.documents.forEach {
+                    val player = it.toObject(Player::class.java)!!
+                    playerMap[player.id] = player
+                }
+                playersList.postValue(playerMap)
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "allPlayers fetch FAILED ", it)

@@ -58,7 +58,7 @@ class MainViewModel: ViewModel() {
         var isSelected: Boolean = false
     )
 
-    private var _players = MutableLiveData<List<Player>>()
+    private var _players = MutableLiveData<HashMap<String, Player>>()
 
     private var _selectedPlayers = MutableLiveData(HashSet<String>())
     fun selectedPlayers(): LiveData<HashSet<String>> {
@@ -74,7 +74,7 @@ class MainViewModel: ViewModel() {
         if (_playerSelections == null) {
             val playerSelections = MediatorLiveData<List<PlayerSelection>>()
             playerSelections.addSource(_players) { players ->
-                playerSelections.postValue(players.map { player ->
+                playerSelections.postValue(players.values.map { player ->
                     PlayerSelection(player)
                 })
             }

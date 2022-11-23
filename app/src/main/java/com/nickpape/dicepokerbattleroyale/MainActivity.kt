@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             if (it != null) {
                 mainViewModel.addOrUpdatePlayer(
                     Player(
-                        it.email!!, // TODO
+                        it.displayName ?: it.email!!,
                         it.uid
                     )
                 )
