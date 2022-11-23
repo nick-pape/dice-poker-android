@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.nickpape.dicepokerbattleroyale.*
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentReviewGameBinding
-import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
 import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 
@@ -22,8 +21,7 @@ import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 class ReviewGameFragment : Fragment() {
     private val args by navArgs<ReviewGameFragmentArgs>()
 
-    private val mainViewModel: MainViewModel by activityViewModels()
-    private val viewModel: GameViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     private var _binding: FragmentReviewGameBinding? = null
     private val binding get() = _binding!!
@@ -46,8 +44,6 @@ class ReviewGameFragment : Fragment() {
             )
             findNavController().navigate(directions)
         }
-
-
 
         return binding.root
     }

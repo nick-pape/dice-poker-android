@@ -12,14 +12,14 @@ import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 import com.nickpape.dicepokerbattleroyale.models.DiceRoll
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceRollBinding
 
 class DiceRollFragment : Fragment() {
 
-    private val viewModel: GameViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     private var _binding: FragmentDiceRollBinding? = null
     private val binding get() = _binding!!

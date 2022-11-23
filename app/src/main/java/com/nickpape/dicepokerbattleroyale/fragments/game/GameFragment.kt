@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nickpape.dicepokerbattleroyale.adapters.PlayerScore
 import com.nickpape.dicepokerbattleroyale.adapters.PlayerChipAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentGameBinding
-import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
 import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 /**
@@ -21,8 +20,7 @@ class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
 
-    private val mainViewModel: MainViewModel by activityViewModels()
-    private val viewModel: GameViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     private val args by navArgs<GameFragmentArgs>()
 
@@ -42,11 +40,11 @@ class GameFragment : Fragment() {
         }
 
         viewModel.selectPlayer(
-            mainViewModel.firebaseAuthLiveData.getCurrentUser()!!.uid
+            viewModel.firebaseAuthLiveData.getCurrentUser()!!.uid
         )
 
         viewModel.selectedPlayer().observe(viewLifecycleOwner) {
-            if (it == mainViewModel.firebaseAuthLiveData.getCurrentUser()!!.uid) {
+            if (it == viewModel.firebaseAuthLiveData.getCurrentUser()!!.uid) {
                 // TODO
                 binding.rollDiceContainer.visibility = View.VISIBLE
             } else {

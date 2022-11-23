@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentPlayerChipBinding
-import com.nickpape.dicepokerbattleroyale.view_models.GameViewModel
+import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 data class PlayerScore(val id: String, val name: String, val score: Int, val selected: Boolean)
 
-class PlayerChipAdapter(val viewModel: GameViewModel) : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerDiff()) {
+class PlayerChipAdapter(val viewModel: MainViewModel) : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerDiff()) {
 
     // ViewHolder pattern
     inner class VH(val playerChipBinding: FragmentPlayerChipBinding)
