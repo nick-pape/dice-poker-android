@@ -10,6 +10,8 @@ import com.nickpape.dicepokerbattleroyale.adapters.PlayerScore
 import com.nickpape.dicepokerbattleroyale.api.ViewModelDBHelper
 import com.nickpape.dicepokerbattleroyale.models.DiceRoll
 import com.nickpape.dicepokerbattleroyale.models.ScoreSheet
+import java.util.*
+import kotlin.collections.HashMap
 
 class GameViewModel : ViewModel() {
     // Database access
@@ -153,8 +155,9 @@ class GameViewModel : ViewModel() {
         return playerDice
     }
 
+    private val random = Random(System.currentTimeMillis())
     private fun randomDice(): Int {
-        return (1..6).random()
+        return random.nextInt(6) + 1
     }
 
     fun toggleHoldDice(index: Int) {
@@ -197,7 +200,7 @@ class GameViewModel : ViewModel() {
     fun updateScoresheet() {
         dbHelp.updateScoreSheet(_gameId.value!!, _playerScoreSheet!!.value!!) {
 
-            _playerScoreSheets!!.value = _playerScoreSheets!!.value
+            _playerScoreSheets!!.value = _playerScoreSheets!!.value?.clone() as HashMap<String, ScoreSheet>
             _playerScoreSheet!!.value = _playerScoreSheet!!.value
             _gameId.value = _gameId.value
         }

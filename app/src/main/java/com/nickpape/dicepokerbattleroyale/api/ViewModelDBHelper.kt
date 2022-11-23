@@ -43,6 +43,7 @@ class ViewModelDBHelper {
             .set(scoresheet)
             .addOnSuccessListener {
                 Log.d(javaClass.simpleName, "Updated scoresheet ${scoresheet.id} for game $gameId")
+                onSuccessListener.onSuccess(it)
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "FAILED update scoresheet ${scoresheet.id} for game $gameId")

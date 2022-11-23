@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.nickpape.dicepokerbattleroyale.api.ViewModelDBHelper
 import com.nickpape.dicepokerbattleroyale.auth.FirestoreAuthLiveData
 import com.nickpape.dicepokerbattleroyale.models.Game
+import com.nickpape.dicepokerbattleroyale.models.GameWithPlayers
 import com.nickpape.dicepokerbattleroyale.models.Player
 import com.nickpape.dicepokerbattleroyale.models.ScoreSheet
 
