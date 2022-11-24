@@ -63,10 +63,6 @@ class DiceRollFragment : Fragment() {
             setDiceImage(binding.diceFiveImage, it[4])
         }
 
-        viewModel.observePotentialScores().observe(viewLifecycleOwner) {
-            Log.d(javaClass.simpleName, it.toString())
-        }
-
         viewModel.observeDiceCount().observe(viewLifecycleOwner) {
             binding.rollCountText.text = "$it/3"
         }

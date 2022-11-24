@@ -230,31 +230,18 @@ class MainViewModel: ViewModel() {
                 return@addSource
             }
 
-            val isDone = value.ones != null &&
-                    value.twos != null &&
-                    value.threes != null &&
-                    value.fours != null &&
-                    value.fives != null &&
-                    value.sixes != null &&
-                    value.threeOfKind != null &&
-                    value.fourOfKind != null &&
-                    value.fullHouse != null &&
-                    value.smallStraight != null &&
-                    value.largeStraight != null &&
-                    value.yahtzee != null &&
-                    value.chance != null
-            result.postValue(isDone)
+            result.postValue(value.isGameOver())
         }
 
         return result
     }
 
     // TODO() - have this be calculated only after dice rolls
-    fun observePotentialScores(): LiveData<ScoreSheet> {
-        val result = MediatorLiveData<ScoreSheet>()
+    fun observePotentialScores(): LiveData<RawScoreSheet> {
+        val result = MediatorLiveData<RawScoreSheet>()
 
         result.addSource(playerDice) { value ->
-            result.postValue(ScoreSheet.getPotentialScores(value))
+            result.postValue(RawScoreSheet.getPotentialScores(value))
         }
 
         return result
@@ -325,9 +312,11 @@ class MainViewModel: ViewModel() {
         diceCount.value = diceCount.value?.plus(1)
     }
 
-    fun updateScoresheet() {
-        dbHelp.updateScoreSheet(_gameId.value!!, _playerScoreSheet!!.value!!) {
+    fun updateScoresheet(field: ScoreableField, value: Int) {
+        resetDice()
+        _playerScoreSheet!!.value!!.setField(field, value)
 
+        dbHelp.updateScoreSheet(_gameId.value!!, _playerScoreSheet!!.value!!) {
             _playerScoreSheets!!.value = _playerScoreSheets!!.value
             _playerScoreSheet!!.value = _playerScoreSheet!!.value
             _gameId.value = _gameId.value

@@ -6,6 +6,7 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nickpape.dicepokerbattleroyale.models.Game
 import com.nickpape.dicepokerbattleroyale.models.Player
+import com.nickpape.dicepokerbattleroyale.models.RawScoreSheet
 import com.nickpape.dicepokerbattleroyale.models.ScoreSheet
 
 class ViewModelDBHelper {
@@ -24,8 +25,8 @@ class ViewModelDBHelper {
 
                 val resultMap = HashMap<String, ScoreSheet>()
                 result.documents.forEach {
-                    val scoresheet = it.toObject(ScoreSheet::class.java)!!
-                    resultMap[scoresheet.id] = scoresheet
+                    val rawScoresheet = it.toObject(RawScoreSheet::class.java)!!
+                    resultMap[rawScoresheet.id] = rawScoresheet.toScoreSheet()
                 }
 
                 scoresheets.postValue(resultMap)
@@ -40,7 +41,7 @@ class ViewModelDBHelper {
             .document(gameId)
             .collection(scoresheetsCollection)
             .document(scoresheet.id)
-            .set(scoresheet)
+            .set(scoresheet.toRawScoreSheet())
             .addOnSuccessListener {
                 Log.d(javaClass.simpleName, "Updated scoresheet ${scoresheet.id} for game $gameId")
                 onSuccessListener.onSuccess(it)
@@ -102,7 +103,7 @@ class ViewModelDBHelper {
             batch.set(gameRef, Game(playerIds = playerIds.toList()))
             val scoresheetRefs = playerIds.forEach { playerId ->
                 val scoresheetRef = collectionRef.document(playerId)
-                batch.set(scoresheetRef, ScoreSheet())
+                batch.set(scoresheetRef, RawScoreSheet())
             }
         }.addOnCompleteListener {
             Log.d(javaClass.simpleName, "Created game ${gameRef.id}")

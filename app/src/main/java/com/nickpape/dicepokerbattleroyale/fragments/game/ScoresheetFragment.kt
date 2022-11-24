@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -20,6 +21,9 @@ import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceScoreBinding
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentScoresheetBinding
+import com.nickpape.dicepokerbattleroyale.models.RawScoreSheet
+import com.nickpape.dicepokerbattleroyale.models.ScoreSheet
+import com.nickpape.dicepokerbattleroyale.models.ScoreableField
 
 import kotlin.reflect.KMutableProperty
 
@@ -30,84 +34,69 @@ class ScoresheetFragment : Fragment() {
     private var _binding: FragmentScoresheetBinding? = null
     private val binding get() = _binding!!
 
+    data class DiceFieldBinding(
+        val field: ScoreableField,
+        val binding: FragmentDiceScoreBinding,
+        val imageResource: Int? = null,
+        val text: String? = null
+
+    )
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentScoresheetBinding.inflate(inflater, container, false)
 
-        binding.scoreOne.diceScoreImage.setImageResource(R.drawable.dice_one)
-        binding.scoreTwo.diceScoreImage.setImageResource(R.drawable.dice_two)
-        binding.scoreThree.diceScoreImage.setImageResource(R.drawable.dice_three)
-        binding.scoreFour.diceScoreImage.setImageResource(R.drawable.dice_four)
-        binding.scoreFive.diceScoreImage.setImageResource(R.drawable.dice_five)
-        binding.scoreSix.diceScoreImage.setImageResource(R.drawable.dice_six)
+        val scoreFieldsList = listOf(
+            DiceFieldBinding(ScoreableField.Ones, binding.scoreOne, imageResource = R.drawable.dice_one),
+            DiceFieldBinding(ScoreableField.Twos, binding.scoreTwo, imageResource = R.drawable.dice_two),
+            DiceFieldBinding(ScoreableField.Threes, binding.scoreThree, imageResource = R.drawable.dice_three),
+            DiceFieldBinding(ScoreableField.Fours, binding.scoreFour, imageResource = R.drawable.dice_four),
+            DiceFieldBinding(ScoreableField.Fives, binding.scoreFive, imageResource = R.drawable.dice_five),
+            DiceFieldBinding(ScoreableField.Sixes, binding.scoreSix, imageResource = R.drawable.dice_six),
 
-        if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK === Configuration.UI_MODE_NIGHT_YES) {
-            binding.scoreOne.diceScoreImage.setSvgColor(R.color.primaryTextColor)
-            binding.scoreTwo.diceScoreImage.setSvgColor(R.color.primaryTextColor)
-            binding.scoreThree.diceScoreImage.setSvgColor(R.color.primaryTextColor)
-            binding.scoreFour.diceScoreImage.setSvgColor(R.color.primaryTextColor)
-            binding.scoreFive.diceScoreImage.setSvgColor(R.color.primaryTextColor)
-            binding.scoreSix.diceScoreImage.setSvgColor(R.color.primaryTextColor)
+            DiceFieldBinding(ScoreableField.ThreeOfAKind, binding.threeOfAKind, text = "Three of a Kind"),
+            DiceFieldBinding(ScoreableField.FourOfAKind, binding.fourOfAKind, text = "Four of a Kind"),
+            DiceFieldBinding(ScoreableField.FullHouse, binding.fullHouse, text = "Full House"),
+            DiceFieldBinding(ScoreableField.SmallStraight, binding.smallStraight, text = "Small Straight"),
+            DiceFieldBinding(ScoreableField.LargeStraight, binding.largeStraight, text = "Large Straight"),
+            DiceFieldBinding(ScoreableField.Yahtzee, binding.yahtzee, text = "Yahtzee"),
+            DiceFieldBinding(ScoreableField.Chance, binding.chance, text = "Chance")
+        )
+
+        scoreFieldsList.forEach {
+            if (it.imageResource != null) {
+                it.binding.diceScoreImage.setImageResource(it.imageResource)
+
+                if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK === Configuration.UI_MODE_NIGHT_YES) {
+                    it.binding.diceScoreImage.setSvgColor(R.color.primaryTextColor)
+                }
+            } else {
+                it.binding.diceScoreImage.visibility = View.INVISIBLE
+                it.binding.diceScoreText.text = it.text
+            }
         }
 
-        binding.threeOfAKind.diceScoreImage.visibility = View.INVISIBLE
-        binding.fourOfAKind.diceScoreImage.visibility = View.INVISIBLE
-        binding.fullHouse.diceScoreImage.visibility = View.INVISIBLE
-        binding.smallStraight.diceScoreImage.visibility = View.INVISIBLE
-        binding.largeStraight.diceScoreImage.visibility = View.INVISIBLE
-        binding.yahtzee.diceScoreImage.visibility = View.INVISIBLE
-        binding.yahtzeeBonus.diceScoreImage.visibility = View.INVISIBLE
-        binding.chance.diceScoreImage.visibility = View.INVISIBLE
-
-        binding.threeOfAKind.diceScoreText.text = "3 of Kind"
-        binding.fourOfAKind.diceScoreText.text = "4 of Kind"
-        binding.fullHouse.diceScoreText.text = "Full House"
-        binding.smallStraight.diceScoreText.text = "Small Straight"
-        binding.largeStraight.diceScoreText.text = "Large Straight"
-        binding.yahtzee.diceScoreText.text = "Yahtzee"
-        binding.yahtzeeBonus.diceScoreText.text = "Bonus"
-        binding.chance.diceScoreText.text = "Chance"
-
-        viewModel.playerScoreSheet().observe(viewLifecycleOwner) {
-            if (it == null) {
+        viewModel.playerScoreSheet().observe(viewLifecycleOwner) { scoresheet ->
+            if (scoresheet == null) {
                 return@observe
             }
 
-            setActualScore(it.ones, binding.scoreOne)
-            setActualScore(it.twos, binding.scoreTwo)
-            setActualScore(it.threes, binding.scoreThree)
-            setActualScore(it.fours, binding.scoreFour)
-            setActualScore(it.fives, binding.scoreFive)
-            setActualScore(it.sixes, binding.scoreSix)
-
-            setActualScore(it.threeOfKind, binding.threeOfAKind)
-            setActualScore(it.fourOfKind, binding.fourOfAKind)
-            setActualScore(it.fullHouse, binding.fullHouse)
-            setActualScore(it.smallStraight, binding.smallStraight)
-            setActualScore(it.largeStraight, binding.largeStraight)
-            setActualScore(it.yahtzee, binding.yahtzee)
-            setActualScore(it.chance, binding.chance)
+            scoreFieldsList.forEach {
+                setActualScore(scoresheet.getField(it.field), it.binding)
+            }
         }
 
-        viewModel.observePotentialScores().observe(viewLifecycleOwner) {
+        viewModel.observePotentialScores().observe(viewLifecycleOwner) { potentialScores ->
             val playerScoreSheet = viewModel.playerScoreSheet().value ?: return@observe
+            val potentialScoreHelper = potentialScores.toScoreSheet()
 
-            setPotentialScore(playerScoreSheet::ones, it.ones, binding.scoreOne)
-            setPotentialScore(playerScoreSheet::twos, it.twos, binding.scoreTwo)
-            setPotentialScore(playerScoreSheet::threes, it.threes, binding.scoreThree)
-            setPotentialScore(playerScoreSheet::fours, it.fours, binding.scoreFour)
-            setPotentialScore(playerScoreSheet::fives, it.fives, binding.scoreFive)
-            setPotentialScore(playerScoreSheet::sixes, it.sixes, binding.scoreSix)
+            Log.d(javaClass.simpleName, potentialScoreHelper.toString())
 
-            setPotentialScore(playerScoreSheet::threeOfKind, it.threeOfKind, binding.threeOfAKind)
-            setPotentialScore(playerScoreSheet::fourOfKind, it.fourOfKind, binding.fourOfAKind)
-            setPotentialScore(playerScoreSheet::fullHouse, it.fullHouse, binding.fullHouse)
-            setPotentialScore(playerScoreSheet::smallStraight, it.smallStraight, binding.smallStraight)
-            setPotentialScore(playerScoreSheet::largeStraight, it.largeStraight, binding.largeStraight)
-            setPotentialScore(playerScoreSheet::yahtzee, it.yahtzee, binding.yahtzee)
-            setPotentialScore(playerScoreSheet::chance, it.chance, binding.chance)
+            scoreFieldsList.forEach {
+                setPotentialScore(it, potentialScoreHelper, playerScoreSheet)
+            }
         }
 
         return binding.root
@@ -125,24 +114,25 @@ class ScoresheetFragment : Fragment() {
     }
 
     fun setPotentialScore(
-        field: KMutableProperty<Int?>,
-        potentialScore: Int?,
-        scoreBinding: FragmentDiceScoreBinding
+        scoreFieldBinding: DiceFieldBinding,
+        potentialScores: ScoreSheet,
+        scoresheet: ScoreSheet
     ) {
-        if (field.getter.call() == null) {
-            scoreBinding.scoreText.text = potentialScore.toString()
+        val currentScore = scoresheet.getField(scoreFieldBinding.field)
+        val potentialScore = potentialScores.getFieldScore(scoreFieldBinding.field)
 
-            scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16F)
-            scoreBinding.scoreText.setTypeface(null, Typeface.BOLD_ITALIC)
-            scoreBinding.scoreText.paintFlags = scoreBinding.scoreText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        if (currentScore == null) {
+            scoreFieldBinding.binding.scoreText.text = potentialScore.toString()
 
-            scoreBinding.scoreText.setOnClickListener {
-                field.setter.call(potentialScore)
-                viewModel.updateScoresheet()
-                viewModel.resetDice()
+            scoreFieldBinding.binding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16F)
+            scoreFieldBinding.binding.scoreText.setTypeface(null, Typeface.BOLD_ITALIC)
+            scoreFieldBinding.binding.scoreText.paintFlags = scoreFieldBinding.binding.scoreText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+            scoreFieldBinding.binding.scoreText.setOnClickListener {
+                viewModel.updateScoresheet(scoreFieldBinding.field, potentialScore)
             }
         } else {
-            setActualScore(field.getter.call(), scoreBinding)
+            setActualScore(currentScore, scoreFieldBinding.binding)
         }
     }
 
