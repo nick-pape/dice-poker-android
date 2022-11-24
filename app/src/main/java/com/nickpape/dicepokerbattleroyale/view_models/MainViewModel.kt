@@ -165,7 +165,12 @@ class MainViewModel: ViewModel() {
     }
 
     fun getPlayerNameFromId(playerId: String): String {
-        return if (playerId == firebaseAuthLiveData.getCurrentUser()!!.uid) {
+        val user = firebaseAuthLiveData.getCurrentUser()
+        if (user == null) {
+            return ""
+        }
+
+        return if (playerId == user.uid) {
             "You"
         } else {
             playersMap().value!![playerId]!!.display_name
