@@ -3,11 +3,12 @@ package com.nickpape.dicepokerbattleroyale.adapters
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentPlayerRankRowBinding
 
-class PlayerRankAdapter(): ListAdapter<PlayerScore, PlayerRankAdapter.VH>(PlayerChipAdapter.PlayerDiff()) {
+class PlayerRankAdapter(): ListAdapter<PlayerScore, PlayerRankAdapter.VH>(AlwaysDifferent()) {
     inner class VH(private val playerRankRowBinding: FragmentPlayerRankRowBinding)
         : RecyclerView.ViewHolder(playerRankRowBinding.root) {
 
@@ -43,5 +44,16 @@ class PlayerRankAdapter(): ListAdapter<PlayerScore, PlayerRankAdapter.VH>(Player
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         holder.bind(this.currentList[position], position + 1)
+    }
+
+    // Always different since we are using `position` in the bind()
+    class AlwaysDifferent : DiffUtil.ItemCallback<PlayerScore>() {
+        override fun areItemsTheSame(oldItem: PlayerScore, newItem: PlayerScore): Boolean {
+            return false
+        }
+        override fun areContentsTheSame(oldItem: PlayerScore, newItem: PlayerScore): Boolean {
+            return false
+
+        }
     }
 }
