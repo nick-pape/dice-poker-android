@@ -17,11 +17,27 @@ class ViewModelDBHelper {
     private val playerCollection = "allPlayers"
     private val scoresheetsCollection = "scoresheets"
 
-    fun fetchAllScoreSheets(gameId: String, scoresheets: MutableLiveData<HashMap<String, ScoreSheet>>, onSuccessListener: OnSuccessListener<Void>) {
-        db.collection(gameCollection).document(gameId).collection(scoresheetsCollection)
+    fun refreshGame(gameData: MutableLiveData<Game>) {
+        val game = gameData.value!!
+        db.collection(gameCollection).document(game.firestoreID)
             .get()
             .addOnSuccessListener { result ->
-                Log.d(javaClass.simpleName, "Fetched scoresheets for $gameId")
+                Log.d(javaClass.simpleName, "Refreshed Game for ${game.firestoreID}")
+
+                gameData.postValue(
+                    result.toObject(Game::class.java)!!
+                )
+            }
+            .addOnFailureListener {
+                Log.d(javaClass.simpleName, "FAILED refresh game for ${game.firestoreID}")
+            }
+    }
+
+    fun fetchAllScoreSheets(game: Game, scoresheets: MutableLiveData<HashMap<String, ScoreSheet>>, onSuccessListener: OnSuccessListener<Void>) {
+        db.collection(gameCollection).document(game.firestoreID).collection(scoresheetsCollection)
+            .get()
+            .addOnSuccessListener { result ->
+                Log.d(javaClass.simpleName, "Fetched scoresheets for ${game.firestoreID}")
 
                 val resultMap = HashMap<String, ScoreSheet>()
                 result.documents.forEach {
@@ -33,7 +49,7 @@ class ViewModelDBHelper {
                 onSuccessListener.onSuccess(null)
             }
             .addOnFailureListener {
-                Log.d(javaClass.simpleName, "FAILED fetch scoresheets for $gameId")
+                Log.d(javaClass.simpleName, "FAILED fetch scoresheets for ${game.firestoreID}")
             }
     }
 
@@ -52,16 +68,16 @@ class ViewModelDBHelper {
         }
     }
 
-    fun fetchAllGames(gamesList: MutableLiveData<List<Game>>) {
+    fun fetchAllGames(gamesList: MutableLiveData<MutableList<Game>>) {
         db.collection(gameCollection)
             .get()
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "allGames fetch ${result!!.documents.size}")
                 // NB: This is done on a background thread
 
-                gamesList.postValue(result.documents.mapNotNull {
+                gamesList.postValue(ArrayList(result.documents.mapNotNull {
                     it.toObject(Game::class.java)
-                })
+                }))
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "allGames fetch FAILED ", it)
@@ -96,21 +112,26 @@ class ViewModelDBHelper {
             }
     }
 
-    fun createNewGame(newGame: MutableLiveData<String>, playerIds: Set<String>) {
+    fun createNewGame(playerIds: Set<String>, onSuccess: (game: Game) -> Unit) {
         val gameRef = db.collection(gameCollection).document()
         val collectionRef = gameRef.collection(scoresheetsCollection)
 
         db.runTransaction { batch ->
             batch.set(gameRef, Game(playerIds = playerIds.toList()))
-            val scoresheetRefs = playerIds.forEach { playerId ->
-                val scoresheetRef = collectionRef.document(playerId)
-                batch.set(scoresheetRef, RawScoreSheet())
+            playerIds.forEach { playerId ->
+                batch.set(collectionRef.document(playerId), RawScoreSheet())
             }
-        }.addOnCompleteListener {
+        }.addOnSuccessListener {
             Log.d(javaClass.simpleName, "Created game ${gameRef.id}")
-            newGame.postValue(gameRef.id)
+
+            gameRef.get().addOnSuccessListener {
+                val game = it.toObject(Game::class.java)!!
+                onSuccess(game)
+            }.addOnFailureListener {
+                Log.d(javaClass.simpleName, "FAILED reading newly created game ${gameRef.id}: $it")
+            }
         }.addOnFailureListener {
-            Log.d(javaClass.simpleName, "FAILED create game ${gameRef.id}")
+            Log.d(javaClass.simpleName, "FAILED create game ${gameRef.id}: $it")
         }
     }
 }

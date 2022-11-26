@@ -56,8 +56,8 @@ class ScoresheetFragment : Fragment() {
             DiceFieldBinding(ScoreableField.Fives, binding.scoreFive, imageResource = R.drawable.dice_five),
             DiceFieldBinding(ScoreableField.Sixes, binding.scoreSix, imageResource = R.drawable.dice_six),
 
-            DiceFieldBinding(ScoreableField.ThreeOfAKind, binding.threeOfAKind, text = "Three of a Kind"),
-            DiceFieldBinding(ScoreableField.FourOfAKind, binding.fourOfAKind, text = "Four of a Kind"),
+            DiceFieldBinding(ScoreableField.ThreeOfAKind, binding.threeOfAKind, text = "3 of Kind"),
+            DiceFieldBinding(ScoreableField.FourOfAKind, binding.fourOfAKind, text = "4 of Kind"),
             DiceFieldBinding(ScoreableField.FullHouse, binding.fullHouse, text = "Full House"),
             DiceFieldBinding(ScoreableField.SmallStraight, binding.smallStraight, text = "Small Straight"),
             DiceFieldBinding(ScoreableField.LargeStraight, binding.largeStraight, text = "Large Straight"),
@@ -89,6 +89,10 @@ class ScoresheetFragment : Fragment() {
         }
 
         viewModel.observePotentialScores().observe(viewLifecycleOwner) { potentialScores ->
+            if (potentialScores == null) {
+                return@observe
+            }
+
             val playerScoreSheet = viewModel.playerScoreSheet().value ?: return@observe
             val potentialScoreHelper = potentialScores.toScoreSheet()
 

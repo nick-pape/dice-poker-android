@@ -25,13 +25,13 @@ class MainViewModel: ViewModel() {
 
 
     // ====================== Games ==============================
-    private var _games = MutableLiveData<List<Game>>()
+    private var _games = MutableLiveData<MutableList<Game>>()
 
     fun fetchAllGames() {
         dbHelp.fetchAllGames(_games)
     }
 
-    fun games(): LiveData<List<Game>> {
+    fun games(): LiveData<MutableList<Game>> {
         return _games
     }
 
@@ -41,35 +41,13 @@ class MainViewModel: ViewModel() {
         return game!!
     }
 
-    private var _newGame = MutableLiveData<String>()
-
-    fun createGame(playerIds: Set<String>) {
-        dbHelp.createNewGame(_newGame, playerIds)
-    }
-
-    fun getNewGame(): LiveData<String> {
-        return _newGame
-    }
-
-    private var _currentGame: LiveData<Game>? = null
-    fun currentGame(): LiveData<Game> {
-        if (_currentGame == null) {
-
-            Log.d(javaClass.simpleName, "Creating Paired Live Data")
-
-            _currentGame = PairedLiveData<Game, String, List<Game>>(
-                _gameId,
-                games()
-            ) { id, list ->
-
-                Log.d(javaClass.simpleName, "Transforming $id in $list from Paired Live Data")
-
-                return@PairedLiveData list.find {
-                    it.firestoreID == id
-                }!!
-            }
+    fun createGame(playerIds: Set<String>, onSuccess: (game: Game) -> Unit) {
+        dbHelp.createNewGame(playerIds) {
+            val games = _games.value!!
+            games.add(it)
+            _games.postValue(games)
+            onSuccess(it)
         }
-        return _currentGame!!
     }
 
     private var _currentPlayer: LiveData<Player>? = null
@@ -225,7 +203,7 @@ class MainViewModel: ViewModel() {
         if (_playerScoreSheets == null) {
             val result = MediatorLiveData<HashMap<String, ScoreSheet>>()
 
-            result.addSource(_gameId) {
+            result.addSource(currentGame()) {
                 dbHelp.fetchAllScoreSheets(it, result) {
                     _fetchDone.postValue(true)
                 }
@@ -283,14 +261,16 @@ class MainViewModel: ViewModel() {
         _selectedPlayer.postValue(playerId)
     }
 
-    val _gameId: MutableLiveData<String> = MutableLiveData()
-    fun setGameId(gameId: String) {
-        _gameId.postValue(gameId)
-    }
-    fun gameId(): LiveData<String> {
-        return _gameId
+    private val _currentGame: MutableLiveData<Game> = MutableLiveData()
+    fun setGameById(gameId: String) {
+        _currentGame.postValue(games().value!!.find {
+            it.firestoreID == gameId
+        })
     }
 
+    fun currentGame(): LiveData<Game> {
+        return _currentGame
+    }
 
     fun isGameOver(): LiveData<Boolean> {
         val result = MediatorLiveData<Boolean>()
@@ -314,6 +294,12 @@ class MainViewModel: ViewModel() {
 
         result.addSource(playerDice) { value ->
             result.postValue(RawScoreSheet.getPotentialScores(value))
+        }
+
+        result.addSource(diceCount) {
+            if (it == 0) {
+                result.postValue(null)
+            }
         }
 
         return result
@@ -398,7 +384,7 @@ class MainViewModel: ViewModel() {
     }
 
     fun refreshGame() {
-        _gameId.value = _gameId.value
+        dbHelp.refreshGame(_currentGame)
     }
 
     // ===========================================================

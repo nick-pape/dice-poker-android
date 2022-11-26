@@ -28,7 +28,7 @@ class ReviewGameFragment : Fragment() {
     ): View? {
         _binding = FragmentReviewGameBinding.inflate(inflater, container, false)
 
-        viewModel.setGameId(
+        viewModel.setGameById(
             args.gameId
         )
 

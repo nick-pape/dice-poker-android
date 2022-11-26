@@ -45,15 +45,12 @@ class CreateGameFragment : Fragment() {
         }
 
         binding.createGameButton.setOnClickListener {
-            viewModel.getNewGame().observe(viewLifecycleOwner) {
-                // TODO -- remove this frame from backstack
-                val directions = CreateGameFragmentDirections.actionCreateGameFragmentToReviewGameFragment(it)
-                findNavController().navigate(directions)
-            }
-
             viewModel.createGame(
                 viewModel.selectedPlayers().value!!
-            )
+            ) {
+                val directions = CreateGameFragmentDirections.actionCreateGameFragmentToReviewGameFragment(it.firestoreID)
+                findNavController().navigate(directions)
+            }
         }
 
         return binding.root
