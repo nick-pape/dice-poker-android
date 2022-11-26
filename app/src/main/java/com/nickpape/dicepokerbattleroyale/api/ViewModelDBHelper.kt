@@ -17,7 +17,7 @@ class ViewModelDBHelper {
     private val playerCollection = "allPlayers"
     private val scoresheetsCollection = "scoresheets"
 
-    fun fetchAllScoreSheets(gameId: String, scoresheets: MutableLiveData<HashMap<String, ScoreSheet>>) {
+    fun fetchAllScoreSheets(gameId: String, scoresheets: MutableLiveData<HashMap<String, ScoreSheet>>, onSuccessListener: OnSuccessListener<Void>) {
         db.collection(gameCollection).document(gameId).collection(scoresheetsCollection)
             .get()
             .addOnSuccessListener { result ->
@@ -30,6 +30,7 @@ class ViewModelDBHelper {
                 }
 
                 scoresheets.postValue(resultMap)
+                onSuccessListener.onSuccess(null)
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "FAILED fetch scoresheets for $gameId")

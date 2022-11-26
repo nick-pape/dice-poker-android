@@ -150,13 +150,20 @@ class MainViewModel: ViewModel() {
         return _playerScoreSheet!!
     }
 
+    private var _fetchDone = MutableLiveData<Boolean>(false)
+    fun fetchDone(): LiveData<Boolean> {
+        return _fetchDone
+    }
+
     private var _playerScoreSheets: MediatorLiveData<HashMap<String, ScoreSheet>>? = null
     fun playerScoreSheets(): LiveData<HashMap<String, ScoreSheet>> {
         if (_playerScoreSheets == null) {
             val result = MediatorLiveData<HashMap<String, ScoreSheet>>()
 
             result.addSource(_gameId) {
-                dbHelp.fetchAllScoreSheets(it, result)
+                dbHelp.fetchAllScoreSheets(it, result) {
+                    _fetchDone.postValue(true)
+                }
             }
 
             _playerScoreSheets = result
@@ -317,10 +324,12 @@ class MainViewModel: ViewModel() {
         _playerScoreSheet!!.value!!.setField(field, value)
 
         dbHelp.updateScoreSheet(_gameId.value!!, _playerScoreSheet!!.value!!) {
-            _playerScoreSheets!!.value = _playerScoreSheets!!.value
-            _playerScoreSheet!!.value = _playerScoreSheet!!.value
-            _gameId.value = _gameId.value
+            refreshGame()
         }
+    }
+
+    fun refreshGame() {
+        _gameId.value = _gameId.value
     }
 
     // ===========================================================

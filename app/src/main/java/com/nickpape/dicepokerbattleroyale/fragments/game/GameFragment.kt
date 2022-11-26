@@ -52,6 +52,14 @@ class GameFragment : Fragment() {
             }
         }
 
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshGame()
+        }
+
+        viewModel.fetchDone().observe(viewLifecycleOwner) {
+            binding.swipeRefresh.isRefreshing = false
+        }
+
         return binding.root
     }
 
