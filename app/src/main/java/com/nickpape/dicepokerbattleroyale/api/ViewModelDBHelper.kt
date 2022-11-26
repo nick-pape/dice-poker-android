@@ -37,19 +37,19 @@ class ViewModelDBHelper {
             }
     }
 
-    fun updateScoreSheet(gameId: String, scoresheet: ScoreSheet, onSuccessListener: OnSuccessListener<Void>) {
-        db.collection(gameCollection)
-            .document(gameId)
-            .collection(scoresheetsCollection)
-            .document(scoresheet.id)
-            .set(scoresheet.toRawScoreSheet())
-            .addOnSuccessListener {
-                Log.d(javaClass.simpleName, "Updated scoresheet ${scoresheet.id} for game $gameId")
-                onSuccessListener.onSuccess(it)
-            }
-            .addOnFailureListener {
-                Log.d(javaClass.simpleName, "FAILED update scoresheet ${scoresheet.id} for game $gameId")
-            }
+    fun updateScoreSheetAndGame(game: Game, scoresheet: ScoreSheet, onSuccess: () -> Unit) {
+        val gameRef = db.collection(gameCollection).document(game.firestoreID)
+        val scoresheetRef = gameRef.collection(scoresheetsCollection).document(scoresheet.id)
+
+        db.runTransaction { batch ->
+            batch.set(gameRef, game)
+            batch.set(scoresheetRef, scoresheet.toRawScoreSheet())
+        }.addOnSuccessListener {
+            Log.d(javaClass.simpleName, "Updated scoresheet ${scoresheet.id} for game ${game.firestoreID}")
+            onSuccess()
+        }.addOnFailureListener {
+            Log.d(javaClass.simpleName, "FAILED update scoresheet ${scoresheet.id} for game ${game.firestoreID}")
+        }
     }
 
     fun fetchAllGames(gamesList: MutableLiveData<List<Game>>) {

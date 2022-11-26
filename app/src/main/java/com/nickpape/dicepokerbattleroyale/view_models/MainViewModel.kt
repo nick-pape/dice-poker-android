@@ -1,10 +1,8 @@
 package com.nickpape.dicepokerbattleroyale.view_models
 
+import android.provider.MediaStore.Audio.Media
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.nickpape.dicepokerbattleroyale.adapters.PlayerScore
 import com.nickpape.dicepokerbattleroyale.api.ViewModelDBHelper
 import com.nickpape.dicepokerbattleroyale.auth.FirestoreAuthLiveData
@@ -51,6 +49,28 @@ class MainViewModel: ViewModel() {
     fun getNewGame(): LiveData<String> {
         return _newGame
     }
+
+    private var _currentGame: LiveData<Game>? = null
+    fun currentGame(): LiveData<Game> {
+        if (_currentGame == null) {
+
+            Log.d(javaClass.simpleName, "Creating Paired Live Data")
+
+            _currentGame = PairedLiveData<Game, String, List<Game>>(
+                _gameId,
+                games()
+            ) { id, list ->
+
+                Log.d(javaClass.simpleName, "Transforming $id in $list from Paired Live Data")
+
+                return@PairedLiveData list.find {
+                    it.firestoreID == id
+                }!!
+            }
+        }
+        return _currentGame!!
+    }
+
     // ===========================================================
 
     // =================== Players ==========================
@@ -320,11 +340,15 @@ class MainViewModel: ViewModel() {
     }
 
     fun updateScoresheet(field: ScoreableField, value: Int) {
-        resetDice()
-        _playerScoreSheet!!.value!!.setField(field, value)
+        val game = currentGame().value!!
+        val scoresheet = _playerScoreSheet!!.value!!
 
-        dbHelp.updateScoreSheet(_gameId.value!!, _playerScoreSheet!!.value!!) {
+        scoresheet.setField(field, value)
+        game.nextPlayer()
+
+        dbHelp.updateScoreSheetAndGame(game, _playerScoreSheet!!.value!!) {
             refreshGame()
+            resetDice()
         }
     }
 
