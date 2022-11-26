@@ -55,6 +55,20 @@ class DiceRollFragment : Fragment() {
             viewModel.rollDice()
         }
 
+        viewModel.isActiveUserTurn().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.otherPlayerTurn.visibility = View.GONE
+                binding.diceContainer.visibility = View.VISIBLE
+            } else {
+                val currentPlayerName = viewModel.currentPlayerInGame().value!!.display_name
+
+                binding.otherPlayerTurn.text = "Waiting on $currentPlayerName's turn..."
+                binding.otherPlayerTurn.visibility = View.VISIBLE
+                binding.diceContainer.visibility = View.GONE
+            }
+
+        }
+
         viewModel.observePlayerDice().observe(viewLifecycleOwner) {
             setDiceImage(binding.diceOneImage, it[0])
             setDiceImage(binding.diceTwoImage, it[1])
