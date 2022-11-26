@@ -56,7 +56,6 @@ class PlayerChipAdapter(val viewModel: MainViewModel) : ListAdapter<PlayerScore,
                 }
             })
 
-
             chip.setOnClickListener {
                 viewModel.selectPlayer(playerScore.id)
                 Toast.makeText(chip.context, "Switched to ${playerScore.name}'s Score Sheet", Toast.LENGTH_SHORT).show()
