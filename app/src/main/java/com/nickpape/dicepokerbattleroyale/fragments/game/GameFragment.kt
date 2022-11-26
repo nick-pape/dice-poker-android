@@ -43,9 +43,8 @@ class GameFragment : Fragment() {
             viewModel.firebaseAuthLiveData.getCurrentUser()!!.uid
         )
 
-        viewModel.selectedPlayer().observe(viewLifecycleOwner) {
-            if (it == viewModel.firebaseAuthLiveData.getCurrentUser()!!.uid) {
-                // TODO
+        viewModel.shouldShowDice().observe(viewLifecycleOwner) {
+            if (it) {
                 binding.rollDiceContainer.visibility = View.VISIBLE
             } else {
                 binding.rollDiceContainer.visibility = View.GONE

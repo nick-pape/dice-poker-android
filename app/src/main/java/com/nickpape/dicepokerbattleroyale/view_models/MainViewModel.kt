@@ -3,6 +3,7 @@ package com.nickpape.dicepokerbattleroyale.view_models
 import android.provider.MediaStore.Audio.Media
 import android.util.Log
 import androidx.lifecycle.*
+import com.google.firebase.auth.FirebaseUser
 import com.nickpape.dicepokerbattleroyale.adapters.PlayerScore
 import com.nickpape.dicepokerbattleroyale.api.ViewModelDBHelper
 import com.nickpape.dicepokerbattleroyale.auth.FirestoreAuthLiveData
@@ -69,6 +70,50 @@ class MainViewModel: ViewModel() {
             }
         }
         return _currentGame!!
+    }
+
+    private var _currentPlayer: LiveData<Player>? = null
+    fun currentPlayerInGame(): LiveData<Player> {
+        if (_currentPlayer == null) {
+            _currentPlayer = PairedLiveData<Player, Game, HashMap<String, Player>>(currentGame(), playersMap()) {
+                game, players ->
+                return@PairedLiveData players[game.playerIds[game.currentPlayerIndex]]!!
+            }
+        }
+        return _currentPlayer!!
+    }
+
+    private var _isActiveUserTurn: LiveData<Boolean>? = null
+    fun isActiveUserTurn(): LiveData<Boolean> {
+        if (_isActiveUserTurn == null) {
+            _isActiveUserTurn = PairedLiveData<Boolean, Player, FirebaseUser?>(currentPlayerInGame(), firebaseAuthLiveData) {
+                currentPlayer, currentUser ->
+                return@PairedLiveData currentPlayer.id == currentUser?.uid
+            }
+        }
+        return _isActiveUserTurn!!
+    }
+
+    private var _currentSelectedScorecardIsCurrentUser: LiveData<Boolean>? = null
+    fun currentSelectedScorecardIsCurrentUser(): LiveData<Boolean> {
+        if (_currentSelectedScorecardIsCurrentUser == null) {
+            _currentSelectedScorecardIsCurrentUser = PairedLiveData<Boolean, String, FirebaseUser?>(selectedPlayer(), firebaseAuthLiveData) {
+                selectedPlayerId, currentUser ->
+                return@PairedLiveData selectedPlayerId == currentUser?.uid
+            }
+        }
+        return _currentSelectedScorecardIsCurrentUser!!
+    }
+
+    private var _shouldShowDice: LiveData<Boolean>? = null
+    fun shouldShowDice(): LiveData<Boolean> {
+        if (_shouldShowDice == null) {
+            _shouldShowDice = PairedLiveData<Boolean, Boolean, Boolean>(isActiveUserTurn(), currentSelectedScorecardIsCurrentUser()) {
+                isActiveUserTurn, currentSelectedScorecardIsCurrentUser ->
+                return@PairedLiveData isActiveUserTurn && currentSelectedScorecardIsCurrentUser
+            }
+        }
+        return _shouldShowDice!!
     }
 
     // ===========================================================
