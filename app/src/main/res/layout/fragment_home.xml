@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.home.HomeFragment">
+    tools:context=".fragments.home.HomeFragment"
+    android:id="@+id/swipe_refresh">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
     <TextView
         android:id="@+id/your_games_title"
         android:text="Your Games:"
@@ -40,6 +45,7 @@
         app:srcCompat="@android:drawable/ic_input_add"
         android:tooltipText="Create Game"
         />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

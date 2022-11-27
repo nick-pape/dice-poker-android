@@ -28,7 +28,9 @@ class MainViewModel: ViewModel() {
     private var _games = MutableLiveData<MutableList<Game>>()
 
     fun fetchAllGames() {
-        dbHelp.fetchAllGames(_games)
+        dbHelp.fetchAllGames(_games) {
+            _fetchDone.postValue(true)
+        }
     }
 
     fun games(): LiveData<MutableList<Game>> {

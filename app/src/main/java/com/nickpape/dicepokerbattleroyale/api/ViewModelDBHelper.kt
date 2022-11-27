@@ -72,7 +72,7 @@ class ViewModelDBHelper {
         }
     }
 
-    fun fetchAllGames(gamesList: MutableLiveData<MutableList<Game>>) {
+    fun fetchAllGames(gamesList: MutableLiveData<MutableList<Game>>, onSuccess: () -> Unit) {
         db.collection(gameCollection)
             .orderBy("updatedTimeStamp", Query.Direction.DESCENDING)
             .get()
@@ -83,6 +83,8 @@ class ViewModelDBHelper {
                 gamesList.postValue(ArrayList(result.documents.mapNotNull {
                     it.toObject(Game::class.java)
                 }))
+
+                onSuccess()
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "allGames fetch FAILED ", it)

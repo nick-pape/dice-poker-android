@@ -33,6 +33,15 @@ class HomeFragment : Fragment() {
         val itemDecor = DividerItemDecoration(binding.gamesList.context, LinearLayoutManager.VERTICAL)
         binding.gamesList.addItemDecoration(itemDecor)
 
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.fetchAllGames()
+        }
+
+        viewModel.fetchDone().observe(viewLifecycleOwner) {
+            binding.swipeRefresh.isRefreshing = false
+        }
+
+
         viewModel.games().observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
