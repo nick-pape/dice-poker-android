@@ -66,6 +66,8 @@ class ScoresheetFragment : Fragment() {
             DiceFieldBinding(ScoreableField.Chance, binding.chance, text = "Chance")
         )
 
+        binding.yahtzeeBonus.scoreText.setBackgroundResource(0)
+
         scoreFieldsList.forEach {
             if (it.imageResource != null) {
                 it.binding.diceScoreImage.setImageResource(it.imageResource)
@@ -85,7 +87,7 @@ class ScoresheetFragment : Fragment() {
             }
 
             scoreFieldsList.forEach {
-                setActualScore(scoresheet.getField(it.field), it.binding)
+                setActualScore(scoresheet.getField(it.field), it)
             }
         }
 
@@ -109,13 +111,22 @@ class ScoresheetFragment : Fragment() {
 
     fun setActualScore(
         score: Int?,
-        scoreBinding: FragmentDiceScoreBinding
+        scoreFieldBinding: DiceFieldBinding
     ) {
-        scoreBinding.scoreText.setOnClickListener(null)
-        scoreBinding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25F)
-        scoreBinding.scoreText.setTypeface(null, Typeface.NORMAL )
-        scoreBinding.scoreText.paintFlags = scoreBinding.scoreText.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
-        scoreBinding.scoreText.text = score?.toString() ?: ""
+        scoreFieldBinding.binding.scoreText.setOnClickListener(null)
+        scoreFieldBinding.binding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25F)
+        scoreFieldBinding.binding.scoreText.setTypeface(null, Typeface.NORMAL )
+        scoreFieldBinding.binding.scoreText.paintFlags = scoreFieldBinding.binding.scoreText.paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
+
+        if (scoreFieldBinding.field == ScoreableField.YahtzeeBonus) {
+            scoreFieldBinding.binding.scoreText.text = if (score == null) {
+                ""
+            } else {
+                "+$score"
+            }
+        } else {
+            scoreFieldBinding.binding.scoreText.text = score?.toString() ?: ""
+        }
     }
 
     fun setPotentialScore(
@@ -139,7 +150,7 @@ class ScoresheetFragment : Fragment() {
                 viewModel.updateScoresheet(scoreFieldBinding.field, potentialScore, isBonusYahtzeeEligible)
             }
         } else {
-            setActualScore(currentScore, scoreFieldBinding.binding)
+            setActualScore(currentScore, scoreFieldBinding)
         }
     }
 

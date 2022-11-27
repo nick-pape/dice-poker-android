@@ -347,7 +347,7 @@ class MainViewModel: ViewModel() {
         val result = MediatorLiveData<Boolean>()
 
         result.addSource(diceCount) {
-            result.postValue(it < 100 && isGameOver().value == false)
+            result.postValue(it < 3 && isGameOver().value == false)
         }
 
         result.addSource(isGameOver()) {
