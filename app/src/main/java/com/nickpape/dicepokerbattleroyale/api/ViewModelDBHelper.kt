@@ -3,6 +3,7 @@ package com.nickpape.dicepokerbattleroyale.api
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.nickpape.dicepokerbattleroyale.models.Game
@@ -58,6 +59,8 @@ class ViewModelDBHelper {
         val gameRef = db.collection(gameCollection).document(game.firestoreID)
         val scoresheetRef = gameRef.collection(scoresheetsCollection).document(scoresheet.id)
 
+        game.updatedTimeStamp = Timestamp.now()
+
         db.runTransaction { batch ->
             batch.set(gameRef, game)
             batch.set(scoresheetRef, scoresheet.toRawScoreSheet())
@@ -71,7 +74,7 @@ class ViewModelDBHelper {
 
     fun fetchAllGames(gamesList: MutableLiveData<MutableList<Game>>) {
         db.collection(gameCollection)
-            .orderBy("timeStamp", Query.Direction.DESCENDING)
+            .orderBy("updatedTimeStamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "allGames fetch ${result!!.documents.size}")

@@ -24,7 +24,7 @@ class GameListAdapter(private val viewLifecycleOwner: LifecycleOwner, private va
 
         override fun areContentsTheSame(oldItem: Game, newItem: Game): Boolean {
             return oldItem.firestoreID == newItem.firestoreID
-                    && oldItem.timeStamp == newItem.timeStamp
+                    && oldItem.updatedTimeStamp == newItem.updatedTimeStamp
         }
     }
 
@@ -40,7 +40,7 @@ class GameListAdapter(private val viewLifecycleOwner: LifecycleOwner, private va
                 return@map name
             }.joinToString()
 
-            holder.rowBinding.lastPlayed.text = android.text.format.DateUtils.getRelativeTimeSpanString(game.timeStamp!!.seconds * 1000)
+            holder.rowBinding.lastPlayed.text = android.text.format.DateUtils.getRelativeTimeSpanString(game.updatedTimeStamp!!.seconds * 1000)
 
             holder.rowBinding.root.setOnClickListener {
                 val directions = HomeFragmentDirections.actionHomeFragmentToReviewGameFragment(
