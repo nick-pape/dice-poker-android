@@ -42,12 +42,7 @@ class PlayerSelectorAdapter(private val viewModel: MainViewModel)
         fun bind(holder: VH, position: Int) {
             val playerSelection = viewModel.getPlayer(position)
             holder.rowBinding.playerName.text = playerSelection.player.display_name
-
-            holder.rowBinding.playerName.setBackgroundColor(if (playerSelection.isSelected) {
-                Color.YELLOW
-            } else {
-                Color.TRANSPARENT
-            })
+            holder.rowBinding.isSelected.isChecked = playerSelection.isSelected
 
             holder.rowBinding.root.setOnClickListener {
                 viewModel.toggleSelectPlayer(playerSelection.player)

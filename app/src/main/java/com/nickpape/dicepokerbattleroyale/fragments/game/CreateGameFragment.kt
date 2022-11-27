@@ -61,6 +61,10 @@ class CreateGameFragment : Fragment() {
             }
         }
 
+        viewModel.selectedPlayers().observe(viewLifecycleOwner) {
+            binding.createGameButton.text = if (it.size > 1) "Create Game" else "Play Solo"
+        }
+
         return binding.root
     }
 

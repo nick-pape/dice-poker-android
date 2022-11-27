@@ -44,7 +44,13 @@ class MainViewModel: ViewModel() {
     }
 
     fun createGame(playerIds: Set<String>, onSuccess: (game: Game) -> Unit) {
-        dbHelp.createNewGame(playerIds) {
+        val currentPlayerId = firebaseAuthLiveData.getCurrentUser()!!.uid
+        val copy = HashSet<String>(playerIds)
+        copy.remove(currentPlayerId)
+        val playerIdList = ArrayList<String>(copy)
+        playerIdList.add(0, currentPlayerId)
+
+        dbHelp.createNewGame(playerIdList) {
             val games = _games.value!!
             games.add(it)
             _games.postValue(games)
@@ -108,6 +114,8 @@ class MainViewModel: ViewModel() {
 
     private var _selectedPlayers = MutableLiveData(HashSet<String>())
     fun selectedPlayers(): LiveData<HashSet<String>> {
+        _selectedPlayers.value!!.add(firebaseAuthLiveData.getCurrentUser()!!.uid)
+        _selectedPlayers.value = _selectedPlayers.value
         return _selectedPlayers
     }
 
@@ -126,12 +134,16 @@ class MainViewModel: ViewModel() {
         if (_playerSelections == null) {
             val playerSelections = MediatorLiveData<List<PlayerSelection>>()
             playerSelections.addSource(_players) { players ->
-                playerSelections.postValue(players.values.map { player ->
-                    PlayerSelection(player)
-                })
+                val selected = selectedPlayers().value!!
+
+                playerSelections.postValue(players.values
+                    .filter { it.id != firebaseAuthLiveData.getCurrentUser()?.uid }
+                    .map { player ->
+                        PlayerSelection(player, selected.contains(player.id))
+                    })
             }
 
-            playerSelections.addSource(_selectedPlayers) { selectedPlayers ->
+            playerSelections.addSource(selectedPlayers()) { selectedPlayers ->
                 if (playerSelections.value !== null) {
                     playerSelections.value!!.forEach {
                         Log.d(javaClass.simpleName,"Is ${it.player.id} selected? ${selectedPlayers.contains(it.player.id)}")
