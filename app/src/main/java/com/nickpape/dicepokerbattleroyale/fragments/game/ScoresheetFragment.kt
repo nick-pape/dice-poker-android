@@ -62,6 +62,7 @@ class ScoresheetFragment : Fragment() {
             DiceFieldBinding(ScoreableField.SmallStraight, binding.smallStraight, text = "Small Straight"),
             DiceFieldBinding(ScoreableField.LargeStraight, binding.largeStraight, text = "Large Straight"),
             DiceFieldBinding(ScoreableField.Yahtzee, binding.yahtzee, text = "Yahtzee"),
+            DiceFieldBinding(ScoreableField.YahtzeeBonus, binding.yahtzeeBonus, text = "Bonus"),
             DiceFieldBinding(ScoreableField.Chance, binding.chance, text = "Chance")
         )
 
@@ -125,7 +126,7 @@ class ScoresheetFragment : Fragment() {
         val currentScore = scoresheet.getField(scoreFieldBinding.field)
         val potentialScore = potentialScores.getFieldScore(scoreFieldBinding.field)
 
-        if (currentScore == null) {
+        if (currentScore == null && scoreFieldBinding.field !== ScoreableField.YahtzeeBonus) {
             scoreFieldBinding.binding.scoreText.text = potentialScore.toString()
 
             scoreFieldBinding.binding.scoreText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16F)
@@ -133,7 +134,9 @@ class ScoresheetFragment : Fragment() {
             scoreFieldBinding.binding.scoreText.paintFlags = scoreFieldBinding.binding.scoreText.paintFlags or Paint.UNDERLINE_TEXT_FLAG
 
             scoreFieldBinding.binding.scoreText.setOnClickListener {
-                viewModel.updateScoresheet(scoreFieldBinding.field, potentialScore)
+                var isBonusYahtzeeEligible = scoresheet.getFieldScore(ScoreableField.Yahtzee) == 50
+                        && potentialScores.getFieldScore(ScoreableField.Yahtzee) == 50
+                viewModel.updateScoresheet(scoreFieldBinding.field, potentialScore, isBonusYahtzeeEligible)
             }
         } else {
             setActualScore(currentScore, scoreFieldBinding.binding)

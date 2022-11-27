@@ -18,6 +18,7 @@ enum class ScoreableField {
     SmallStraight,
     LargeStraight,
     Yahtzee,
+    YahtzeeBonus,
     Chance
 }
 
@@ -43,6 +44,11 @@ class ScoreSheet {
         fieldsMap[field] = value
     }
 
+    fun addBonusYahtzee() {
+        fieldsMap[ScoreableField.YahtzeeBonus] =
+            (fieldsMap[ScoreableField.YahtzeeBonus] ?: 0) + 100
+    }
+
     companion object {
         fun fromRawScoreSheet(rawScoreSheet: RawScoreSheet): ScoreSheet {
             val scoresheet = ScoreSheet()
@@ -59,6 +65,7 @@ class ScoreSheet {
             scoresheet.setField(ScoreableField.SmallStraight, rawScoreSheet.smallStraight)
             scoresheet.setField(ScoreableField.LargeStraight, rawScoreSheet.largeStraight)
             scoresheet.setField(ScoreableField.Yahtzee, rawScoreSheet.yahtzee)
+            scoresheet.setField(ScoreableField.YahtzeeBonus, rawScoreSheet.yahtzeeBonus)
             scoresheet.setField(ScoreableField.Chance, rawScoreSheet.chance)
 
             scoresheet.id = rawScoreSheet.id
@@ -82,6 +89,7 @@ class ScoreSheet {
         scoresheet.smallStraight = getField(ScoreableField.SmallStraight)
         scoresheet.largeStraight = getField(ScoreableField.LargeStraight)
         scoresheet.yahtzee = getField(ScoreableField.Yahtzee)
+        scoresheet.yahtzeeBonus = getField(ScoreableField.YahtzeeBonus)
         scoresheet.chance = getField(ScoreableField.Chance)
 
         scoresheet.id = id
@@ -121,6 +129,7 @@ class ScoreSheet {
                 getFieldScore(ScoreableField.SmallStraight) +
                 getFieldScore(ScoreableField.LargeStraight) +
                 getFieldScore(ScoreableField.Yahtzee) +
+                getFieldScore(ScoreableField.YahtzeeBonus)
                 getFieldScore(ScoreableField.Chance)
     }
 
@@ -143,6 +152,7 @@ data class RawScoreSheet(
     var smallStraight: Int? = null,
     var largeStraight: Int? = null,
     var yahtzee: Int? = null,
+    var yahtzeeBonus: Int? = null,
     var chance: Int? = null,
 
     @DocumentId var id: String = "",

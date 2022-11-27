@@ -347,7 +347,7 @@ class MainViewModel: ViewModel() {
         val result = MediatorLiveData<Boolean>()
 
         result.addSource(diceCount) {
-            result.postValue(it < 3 && isGameOver().value == false)
+            result.postValue(it < 100 && isGameOver().value == false)
         }
 
         result.addSource(isGameOver()) {
@@ -370,9 +370,13 @@ class MainViewModel: ViewModel() {
         diceCount.value = diceCount.value?.plus(1)
     }
 
-    fun updateScoresheet(field: ScoreableField, value: Int) {
+    fun updateScoresheet(field: ScoreableField, value: Int, withBonusYahtzee: Boolean) {
         val game = currentGame().value!!
         val scoresheet = _playerScoreSheet!!.value!!
+
+        if (withBonusYahtzee) {
+            scoresheet.addBonusYahtzee()
+        }
 
         scoresheet.setField(field, value)
         game.nextPlayer()
