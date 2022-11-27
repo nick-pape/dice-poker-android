@@ -32,6 +32,14 @@ class CreateGameFragment : Fragment() {
         val itemDecor = DividerItemDecoration(binding.playersList.context, LinearLayoutManager.VERTICAL)
         binding.playersList.addItemDecoration(itemDecor)
 
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.fetchAllPlayers()
+        }
+
+        viewModel.fetchDone().observe(viewLifecycleOwner) {
+            binding.swipeRefresh.isRefreshing = false
+        }
+
         viewModel.playersList().observe(viewLifecycleOwner) {
             Log.d(javaClass.simpleName, "Updating list: $it")
             adapter.submitList(it)

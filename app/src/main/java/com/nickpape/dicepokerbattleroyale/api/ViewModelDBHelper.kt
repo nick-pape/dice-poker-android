@@ -91,7 +91,7 @@ class ViewModelDBHelper {
             }
     }
 
-    fun fetchAllPlayers(playersList: MutableLiveData<HashMap<String, Player>>) {
+    fun fetchAllPlayers(playersList: MutableLiveData<HashMap<String, Player>>, onSuccess: () -> Unit) {
         db.collection(playerCollection)
             .get()
             .addOnSuccessListener { result ->
@@ -103,6 +103,7 @@ class ViewModelDBHelper {
                     playerMap[player.id] = player
                 }
                 playersList.postValue(playerMap)
+                onSuccess()
             }
             .addOnFailureListener {
                 Log.d(javaClass.simpleName, "allPlayers fetch FAILED ", it)

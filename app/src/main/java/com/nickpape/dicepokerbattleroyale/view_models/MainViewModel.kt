@@ -112,7 +112,9 @@ class MainViewModel: ViewModel() {
     }
 
     fun fetchAllPlayers() {
-        dbHelp.fetchAllPlayers(_players)
+        dbHelp.fetchAllPlayers(_players) {
+            _fetchDone.postValue(true)
+        }
     }
 
     public fun playersMap(): LiveData<HashMap<String, Player>> {
