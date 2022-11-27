@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.nickpape.dicepokerbattleroyale.models.Game
 import com.nickpape.dicepokerbattleroyale.models.Player
 import com.nickpape.dicepokerbattleroyale.models.RawScoreSheet
@@ -70,6 +71,7 @@ class ViewModelDBHelper {
 
     fun fetchAllGames(gamesList: MutableLiveData<MutableList<Game>>) {
         db.collection(gameCollection)
+            .orderBy("timeStamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "allGames fetch ${result!!.documents.size}")

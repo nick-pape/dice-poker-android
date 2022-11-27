@@ -40,7 +40,7 @@ class GameListAdapter(private val viewLifecycleOwner: LifecycleOwner, private va
                 return@map name
             }.joinToString()
 
-            // Note to future me: It might be fun to display the date
+            holder.rowBinding.lastPlayed.text = android.text.format.DateUtils.getRelativeTimeSpanString(game.timeStamp!!.seconds * 1000)
 
             holder.rowBinding.root.setOnClickListener {
                 val directions = HomeFragmentDirections.actionHomeFragmentToReviewGameFragment(
