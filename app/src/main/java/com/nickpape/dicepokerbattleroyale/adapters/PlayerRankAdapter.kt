@@ -2,6 +2,7 @@ package com.nickpape.dicepokerbattleroyale.adapters
 
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -16,11 +17,12 @@ class PlayerRankAdapter(): ListAdapter<PlayerScore, PlayerRankAdapter.VH>(Always
                 playerRankRowBinding.playerName.text = playerScore.name
                 playerRankRowBinding.rank.text = rankToString(position)
                 playerRankRowBinding.score.text = playerScore.score.toString()
+                playerRankRowBinding.turnIndicator.visibility = if (playerScore.isPlayerTurn) View.VISIBLE else View.INVISIBLE
 
                 if (position == 1) {
-                    playerRankRowBinding.rank.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24F)
+                    playerRankRowBinding.rank.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 36F)
                 } else {
-                    playerRankRowBinding.rank.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12F)
+                    playerRankRowBinding.rank.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22F)
                 }
             }
 

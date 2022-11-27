@@ -50,6 +50,14 @@ class ReviewGameFragment : Fragment() {
             adapter.notifyDataSetChanged()
         }
 
+        viewModel.fetchDone().observe(viewLifecycleOwner) {
+            binding.swipeRefresh.isRefreshing = false
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.refreshGame()
+        }
+
         return binding.root
     }
 

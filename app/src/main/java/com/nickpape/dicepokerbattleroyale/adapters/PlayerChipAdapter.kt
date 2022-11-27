@@ -14,7 +14,7 @@ import com.google.android.material.badge.BadgeUtils
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentPlayerChipBinding
 import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
-data class PlayerScore(val id: String, val name: String, val score: Int, val selected: Boolean)
+data class PlayerScore(val id: String, val name: String, val score: Int, val selected: Boolean, var isPlayerTurn: Boolean)
 
 class PlayerChipAdapter(val viewModel: MainViewModel) : ListAdapter<PlayerScore, PlayerChipAdapter.VH>(PlayerDiff()) {
 
