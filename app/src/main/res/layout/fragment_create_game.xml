@@ -28,17 +28,28 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/invite_players_title"
-        app:layout_constraintBottom_toTopOf="@id/create_game_button"
+        app:layout_constraintBottom_toTopOf="@id/speed_mode"
         android:layout_margin="12dp"
         />
+        <Switch
+            android:id="@+id/speed_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Speed Mode?"
+            app:layout_constraintTop_toBottomOf="@+id/players_list"
+            app:layout_constraintBottom_toTopOf="@+id/cancel_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_margin="16dp"
+            android:textSize="20dp"
+            />
 
     <Button
         android:id="@+id/cancel_button"
         android:text="Cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        app:layout_constraintTop_toBottomOf="@id/players_list"
+        app:layout_constraintTop_toBottomOf="@id/speed_mode"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/create_game_button"

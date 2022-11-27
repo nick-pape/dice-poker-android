@@ -55,7 +55,8 @@ class CreateGameFragment : Fragment() {
 
         binding.createGameButton.setOnClickListener {
             viewModel.createGame(
-                viewModel.selectedPlayers().value!!
+                viewModel.selectedPlayers().value!!,
+                binding.speedMode.isChecked
             ) {
                 val directions = CreateGameFragmentDirections.actionCreateGameFragmentToReviewGameFragment(it.firestoreID)
                 findNavController().navigate(directions )

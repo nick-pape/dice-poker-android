@@ -43,14 +43,14 @@ class MainViewModel: ViewModel() {
         return game!!
     }
 
-    fun createGame(playerIds: Set<String>, onSuccess: (game: Game) -> Unit) {
+    fun createGame(playerIds: Set<String>, speedMode: Boolean, onSuccess: (game: Game) -> Unit) {
         val currentPlayerId = firebaseAuthLiveData.getCurrentUser()!!.uid
         val copy = HashSet<String>(playerIds)
         copy.remove(currentPlayerId)
         val playerIdList = ArrayList<String>(copy)
         playerIdList.add(0, currentPlayerId)
 
-        dbHelp.createNewGame(playerIdList) {
+        dbHelp.createNewGame(playerIdList, speedMode) {
             val games = _games.value!!
             games.add(it)
             _games.postValue(games)
@@ -63,7 +63,11 @@ class MainViewModel: ViewModel() {
         if (_currentPlayer == null) {
             _currentPlayer = PairedLiveData<Player, Game, HashMap<String, Player>>(currentGame(), playersMap()) {
                 game, players ->
-                return@PairedLiveData players[game.playerIds[game.currentPlayerIndex]]!!
+                return@PairedLiveData if (game.speedMode) {
+                    players[firebaseAuthLiveData.getCurrentUser()!!.uid]!!
+                } else {
+                    players[game.playerIds[game.currentPlayerIndex]]!!
+                }
             }
         }
         return _currentPlayer!!

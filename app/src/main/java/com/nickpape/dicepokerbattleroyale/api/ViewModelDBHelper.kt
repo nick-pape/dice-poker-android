@@ -120,12 +120,12 @@ class ViewModelDBHelper {
             }
     }
 
-    fun createNewGame(playerIds: List<String>, onSuccess: (game: Game) -> Unit) {
+    fun createNewGame(playerIds: List<String>, speedMode: Boolean, onSuccess: (game: Game) -> Unit) {
         val gameRef = db.collection(gameCollection).document()
         val collectionRef = gameRef.collection(scoresheetsCollection)
 
         db.runTransaction { batch ->
-            batch.set(gameRef, Game(playerIds = playerIds))
+            batch.set(gameRef, Game(playerIds = playerIds, speedMode = speedMode))
             playerIds.forEach { playerId ->
                 batch.set(collectionRef.document(playerId), RawScoreSheet())
             }
