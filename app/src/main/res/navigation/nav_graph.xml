@@ -45,7 +45,9 @@
 
         <action
             android:id="@+id/action_CreateGameFragment_to_ReviewGameFragment"
-            app:destination="@id/ReviewGameFragment" />
+            app:destination="@id/ReviewGameFragment"
+            app:popUpTo="@+id/HomeFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment

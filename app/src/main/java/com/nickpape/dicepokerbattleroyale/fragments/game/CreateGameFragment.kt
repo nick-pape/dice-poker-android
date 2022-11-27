@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -57,7 +58,7 @@ class CreateGameFragment : Fragment() {
                 viewModel.selectedPlayers().value!!
             ) {
                 val directions = CreateGameFragmentDirections.actionCreateGameFragmentToReviewGameFragment(it.firestoreID)
-                findNavController().navigate(directions)
+                findNavController().navigate(directions )
             }
         }
 
