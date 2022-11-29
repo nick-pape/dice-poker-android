@@ -516,7 +516,7 @@ class MainViewModel: ViewModel() {
     }
 
     val canRollAgain: LiveData<Boolean> = PairedLiveData<Boolean, Int, Boolean>(diceCount, isGameOver()) { diceCount, gameOver ->
-        return@PairedLiveData diceCount < 30 && !gameOver
+        return@PairedLiveData diceCount < 3 && !gameOver
     }
 
     fun rollDice() {
