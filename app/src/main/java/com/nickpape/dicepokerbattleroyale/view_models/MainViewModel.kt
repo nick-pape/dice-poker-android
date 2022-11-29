@@ -25,24 +25,30 @@ class MainViewModel: ViewModel() {
 
 
     // ====================== Games ==============================
-    private var _games = MutableLiveData<MutableList<Game>>()
+    private var _games: MediatorLiveData<MutableList<Game>>? = null
 
     fun fetchAllGames() {
-        val uid = firebaseAuthLiveData.value?.uid
-        if (uid !== null) {
-            dbHelp.fetchAllGames(uid, _games) {
-                _fetchDone.postValue(true)
-            }
-        }
+        firebaseAuthLiveData.updateUser()
     }
 
-    fun games(): LiveData<MutableList<Game>> {
-        return _games
+    fun games(): MediatorLiveData<MutableList<Game>> {
+        if (_games == null) {
+            val mediator = MediatorLiveData<MutableList<Game>>()
+            mediator.addSource(firebaseAuthLiveData) {
+                if (it != null) {
+                    dbHelp.fetchAllGames(it.uid, mediator) {
+                        _fetchDone.postValue(true)
+                    }
+                }
+            }
+            _games = mediator
+        }
+        return _games!!
     }
 
     // Get a note from the memory cache
     fun getGame(position: Int) : Game {
-        val game = _games.value?.get(position)
+        val game = games().value?.get(position)
         return game!!
     }
 
@@ -54,9 +60,9 @@ class MainViewModel: ViewModel() {
         playerIdList.add(0, currentPlayerId)
 
         dbHelp.createNewGame(playerIdList, speedMode) {
-            val games = _games.value!!
+            val games = games().value!!
             games.add(it)
-            _games.postValue(games)
+            games().postValue(games)
             onSuccess(it)
         }
     }

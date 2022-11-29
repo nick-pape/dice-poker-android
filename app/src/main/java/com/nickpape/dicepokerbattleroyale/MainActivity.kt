@@ -78,8 +78,10 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> {
-                val directions = HomeFragmentDirections.actionHomeFragmentToSettingsFragment()
-                findNavController(R.id.nav_host_fragment_content_main).navigate(directions)
+                val nav = findNavController(R.id.nav_host_fragment_content_main)
+                if (nav.currentDestination?.id != R.id.SettingsFragment) {
+                    nav.navigate(R.id.SettingsFragment)
+                }
                 true
             }
             R.id.action_logout -> {
