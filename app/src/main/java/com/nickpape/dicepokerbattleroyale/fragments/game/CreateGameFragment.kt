@@ -11,8 +11,10 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.adapters.PlayerSelectorAdapter
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentCreateGameBinding
+import com.nickpape.dicepokerbattleroyale.fragments.home.HomeFragmentDirections
 import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 
 class CreateGameFragment : Fragment() {
@@ -58,8 +60,10 @@ class CreateGameFragment : Fragment() {
                 viewModel.selectedPlayers().value!!,
                 binding.speedMode.isChecked
             ) {
+                val nav = findNavController()
+                nav.clearBackStack(R.id.HomeFragment)
                 val directions = CreateGameFragmentDirections.actionCreateGameFragmentToReviewGameFragment(it.firestoreID)
-                findNavController().navigate(directions )
+                findNavController().navigate(directions)
             }
         }
 

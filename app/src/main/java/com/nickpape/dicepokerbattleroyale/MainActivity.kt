@@ -76,9 +76,10 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        val nav = findNavController(R.id.nav_host_fragment_content_main)
+
         return when (item.itemId) {
             R.id.action_settings -> {
-                val nav = findNavController(R.id.nav_host_fragment_content_main)
                 if (nav.currentDestination?.id != R.id.SettingsFragment) {
                     nav.navigate(R.id.SettingsFragment)
                 }
@@ -86,6 +87,8 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_logout -> {
                 Log.d(javaClass.simpleName, "Logout button clickedS")
+
+                nav.clearBackStack(R.id.HomeFragment)
                 AuthUI.getInstance()
                     .signOut(this)
                     .addOnCompleteListener {
