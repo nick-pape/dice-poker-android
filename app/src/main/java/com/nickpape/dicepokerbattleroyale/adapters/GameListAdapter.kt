@@ -23,8 +23,7 @@ class GameListAdapter(private val viewLifecycleOwner: LifecycleOwner, private va
         }
 
         override fun areContentsTheSame(oldItem: Game, newItem: Game): Boolean {
-            return oldItem.firestoreID == newItem.firestoreID
-                    && oldItem.updatedTimeStamp == newItem.updatedTimeStamp
+            return false
         }
     }
 

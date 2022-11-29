@@ -17,6 +17,8 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.github.jinatonic.confetti.CommonConfetti
+import com.github.jinatonic.confetti.ConfettiSource
 import com.nickpape.dicepokerbattleroyale.view_models.MainViewModel
 import com.nickpape.dicepokerbattleroyale.R
 import com.nickpape.dicepokerbattleroyale.databinding.FragmentDiceScoreBinding
@@ -147,6 +149,16 @@ class ScoresheetFragment : Fragment() {
             scoreFieldBinding.binding.scoreText.setOnClickListener {
                 var isBonusYahtzeeEligible = scoresheet.getFieldScore(ScoreableField.Yahtzee) == 50
                         && potentialScores.getFieldScore(ScoreableField.Yahtzee) == 50
+
+                if (isBonusYahtzeeEligible || (scoreFieldBinding.field == ScoreableField.Yahtzee && potentialScore == 50)) {
+                    val colors = IntArray(3)
+                    colors[0] = Color.RED
+                    colors[1] = Color.GREEN
+                    colors[2] = Color.YELLOW
+                    CommonConfetti.rainingConfetti(binding.root, colors).oneShot().animate()
+                    Log.d(javaClass.simpleName, "CONFETTI!")
+                }
+
                 viewModel.updateScoresheet(scoreFieldBinding.field, potentialScore, isBonusYahtzeeEligible)
             }
         } else {
