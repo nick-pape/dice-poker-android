@@ -28,8 +28,11 @@ class MainViewModel: ViewModel() {
     private var _games = MutableLiveData<MutableList<Game>>()
 
     fun fetchAllGames() {
-        dbHelp.fetchAllGames(_games) {
-            _fetchDone.postValue(true)
+        val uid = firebaseAuthLiveData.value?.uid
+        if (uid !== null) {
+            dbHelp.fetchAllGames(uid, _games) {
+                _fetchDone.postValue(true)
+            }
         }
     }
 

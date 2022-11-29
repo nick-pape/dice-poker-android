@@ -97,9 +97,10 @@ class ViewModelDBHelper {
         }
     }
 
-    fun fetchAllGames(gamesList: MutableLiveData<MutableList<Game>>, onSuccess: () -> Unit) {
+    fun fetchAllGames(uid: String, gamesList: MutableLiveData<MutableList<Game>>, onSuccess: () -> Unit) {
         db.collection(gameCollection)
             .orderBy("updatedTimeStamp", Query.Direction.DESCENDING)
+            .whereArrayContains("playerIds", uid)
             .get()
             .addOnSuccessListener { result ->
                 Log.d(javaClass.simpleName, "allGames fetch ${result!!.documents.size}")
