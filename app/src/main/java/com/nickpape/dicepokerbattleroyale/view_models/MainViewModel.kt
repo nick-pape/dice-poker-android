@@ -1,7 +1,6 @@
 package com.nickpape.dicepokerbattleroyale.view_models
 
 import android.content.Context
-import android.provider.MediaStore.Audio.Media
 import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseUser
@@ -445,7 +444,7 @@ class MainViewModel: ViewModel() {
     fun observePotentialScores(): LiveData<RawScoreSheet> {
         val result = MediatorLiveData<RawScoreSheet>()
 
-        result.addSource(playerDice) { value ->
+        result.addSource(_playerDice) { value ->
             result.postValue(RawScoreSheet.getPotentialScores(value))
         }
 
@@ -458,7 +457,7 @@ class MainViewModel: ViewModel() {
         return result
     }
 
-    private val playerDice = MutableLiveData<List<DiceRoll>>(listOf(
+    private val _playerDice = MutableLiveData<List<DiceRoll>>(listOf(
         DiceRoll(null),
         DiceRoll(null),
         DiceRoll(null),
@@ -466,9 +465,29 @@ class MainViewModel: ViewModel() {
         DiceRoll(null)
     ))
 
+    var _diceSum: MediatorLiveData<Int>? = null
+    fun diceSum(): LiveData<Int> {
+        if (_diceSum == null) {
+            val result = MediatorLiveData<Int>()
+            result.addSource(_playerDice) { dice ->
+                result.postValue(
+                    dice.sumOf { it.value ?: 0 }
+                )
+            }
+
+            val dice = _playerDice.value
+            if (dice != null) {
+                result.value = dice.sumOf { it.value ?: 0 }
+            }
+
+            _diceSum = result
+        }
+        return _diceSum!!
+    }
+
     fun resetDice() {
         diceCount.value = 0
-        playerDice.value = listOf(
+        _playerDice.value = listOf(
             DiceRoll(null),
             DiceRoll(null),
             DiceRoll(null),
@@ -478,7 +497,7 @@ class MainViewModel: ViewModel() {
     }
 
     fun observePlayerDice(): LiveData<List<DiceRoll>> {
-        return playerDice
+        return _playerDice
     }
 
     private val random = Random(System.currentTimeMillis())
@@ -487,8 +506,8 @@ class MainViewModel: ViewModel() {
     }
 
     fun toggleHoldDice(index: Int) {
-        playerDice.value!![index].isHeld = !playerDice.value!![index].isHeld
-        playerDice.postValue(playerDice.value)
+        _playerDice.value!![index].isHeld = !_playerDice.value!![index].isHeld
+        _playerDice.postValue(_playerDice.value)
     }
 
     private val diceCount: MutableLiveData<Int> = MutableLiveData(0)
@@ -503,7 +522,7 @@ class MainViewModel: ViewModel() {
     fun rollDice() {
         playDiceRollSound()
 
-        val newDice = playerDice.value!!.map {
+        val newDice = _playerDice.value!!.map {
             if (it.isHeld) {
                 return@map it
             }
@@ -511,7 +530,7 @@ class MainViewModel: ViewModel() {
             return@map DiceRoll(randomDice())
         }
 
-        playerDice.value = newDice
+        _playerDice.value = newDice
         diceCount.value = diceCount.value?.plus(1)
     }
 

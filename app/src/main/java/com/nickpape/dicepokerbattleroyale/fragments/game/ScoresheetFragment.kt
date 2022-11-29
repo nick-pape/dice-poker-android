@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -150,6 +151,7 @@ class ScoresheetFragment : Fragment() {
                 var isBonusYahtzeeEligible = scoresheet.getFieldScore(ScoreableField.Yahtzee) == 50
                         && potentialScores.getFieldScore(ScoreableField.Yahtzee) == 50
 
+                // Handle the Yahtzee and Yahtzee bonus effects
                 if (isBonusYahtzeeEligible || (scoreFieldBinding.field == ScoreableField.Yahtzee && potentialScore == 50)) {
                     val colors = IntArray(3)
                     colors[0] = Color.RED
@@ -159,7 +161,20 @@ class ScoresheetFragment : Fragment() {
                     Log.d(javaClass.simpleName, "CONFETTI!")
 
                     viewModel.playYahtzeeSound()
+                }
 
+                Log.d(javaClass.simpleName, "Dice sum: ${viewModel.diceSum().value ?: 0}")
+                // Handle embarrassment of riches
+                if (scoreFieldBinding.field == ScoreableField.FullHouse &&
+                    (viewModel.diceSum().value ?: 0) > 25) {
+                    Toast.makeText(context, "Embarrassment of Riches!", Toast.LENGTH_LONG).show()
+                }
+
+                // Handle Kobe and Jordan
+                if (potentialScores.getFieldScore(scoreFieldBinding.field) == 24) {
+                    Toast.makeText(context, "KOBE!", Toast.LENGTH_LONG).show()
+                } else if (potentialScores.getFieldScore(scoreFieldBinding.field) == 23) {
+                    Toast.makeText(context, "JORDAN!", Toast.LENGTH_LONG).show()
                 }
 
                 viewModel.updateScoresheet(scoreFieldBinding.field, potentialScore, isBonusYahtzeeEligible)
