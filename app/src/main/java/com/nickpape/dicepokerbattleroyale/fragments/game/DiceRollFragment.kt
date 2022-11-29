@@ -81,7 +81,7 @@ class DiceRollFragment : Fragment() {
             binding.rollCountText.text = "$it/3"
         }
 
-        viewModel.canRollAgain().observe(viewLifecycleOwner) {
+        viewModel.canRollAgain.observe(viewLifecycleOwner) {
             binding.rollButton.isClickable = it
             binding.rollButton.visibility = if (it) { View.VISIBLE } else { View.INVISIBLE }
         }

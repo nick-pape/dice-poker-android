@@ -190,6 +190,30 @@ class MainViewModel: ViewModel() {
     }
     // ===========================================================
 
+    // ==================================================
+    // Statistics
+    fun highScore() {
+
+    }
+
+    fun lowScore() {
+
+    }
+
+    fun medianScore() {
+
+    }
+
+    fun numYahtees() {
+
+    }
+
+    fun currentUserScores() {
+
+    }
+
+    // ==================================================
+
 
 
     // ===========================================================
@@ -374,18 +398,8 @@ class MainViewModel: ViewModel() {
         return diceCount
     }
 
-    fun canRollAgain(): LiveData<Boolean> {
-        val result = MediatorLiveData<Boolean>()
-
-        result.addSource(diceCount) {
-            result.postValue(it < 3 && isGameOver().value == false)
-        }
-
-        result.addSource(isGameOver()) {
-            result.postValue(diceCount.value!! < 3 && !it)
-        }
-
-        return result
+    val canRollAgain: LiveData<Boolean> = PairedLiveData<Boolean, Int, Boolean>(diceCount, isGameOver()) { diceCount, gameOver ->
+        return@PairedLiveData diceCount < 3 && !gameOver
     }
 
     fun rollDice() {
