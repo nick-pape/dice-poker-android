@@ -192,24 +192,94 @@ class MainViewModel: ViewModel() {
 
     // ==================================================
     // Statistics
-    fun highScore() {
 
+    data class Statistics(
+        val highScore: Int = 0,
+        val lowScore: Int = 0,
+        val medianScore: Int = 0,
+        val meanScore: Int = 0,
+        val numYahtzees: Int = 0,
+        val numGames: Int = 0
+        )
+
+    var _stats: MediatorLiveData<Statistics>? = null
+    fun stats(): MediatorLiveData<Statistics> {
+        if (_stats == null) {
+            var result = MediatorLiveData<Statistics>()
+
+            result.addSource(currentUserScoreSheets()) { scoresheets ->
+                val filtered = scoresheets.filter { it.isGameOver() }
+                if (filtered.isNotEmpty()) {
+                    Log.d(javaClass.simpleName, "Calculating Stats")
+
+                    val sorted = filtered
+                        .sortedBy { -it.getScore() }
+
+                    val highScore = sorted.first().getScore()
+                    val lowScore = sorted.last().getScore()
+
+                    val medianScore = if (sorted.size % 2 == 0) {
+                        // even
+                        (
+                                sorted[sorted.size / 2 - 1].getScore() +
+                                        sorted[sorted.size / 2].getScore()
+                                ) / 2
+                    } else {
+                        // odd
+                        sorted[sorted.size / 2].getScore()
+                    }
+
+                    val meanScore = sorted.sumOf { it.getScore() } / sorted.size
+
+                    var yahtzees = 0
+                    for (scoresheet in sorted) {
+                        if (scoresheet.getField(ScoreableField.Yahtzee) == 50) {
+                            yahtzees++
+                        }
+
+                        val bonusScore = scoresheet.getField(ScoreableField.YahtzeeBonus)
+                        if (bonusScore != null) {
+                            yahtzees += bonusScore / 100
+                        }
+                    }
+
+                    result.postValue(Statistics(
+                        meanScore = meanScore,
+                        medianScore = medianScore,
+                        lowScore = lowScore,
+                        highScore = highScore,
+                        numYahtzees = yahtzees,
+                        numGames = filtered.size
+                    ))
+                }
+            }
+
+            _stats = result
+        }
+        return _stats!!
     }
 
-    fun lowScore() {
+    private var _currentUserScoreSheets: MediatorLiveData<List<ScoreSheet>>? = null
+    fun currentUserScoreSheets(): MediatorLiveData<List<ScoreSheet>> {
+        if (_currentUserScoreSheets == null) {
+            val result = MediatorLiveData<List<ScoreSheet>>()
 
-    }
+            fun doFetch(uid: String?, games: List<Game>?) {
+                if (uid != null && games != null) {
+                    dbHelp.fetchAllScoreSheetsForUser(result, uid, games)
+                }
+            }
 
-    fun medianScore() {
+            result.addSource(firebaseAuthLiveData) {
+                doFetch(it?.uid, games().value)
+            }
 
-    }
-
-    fun numYahtees() {
-
-    }
-
-    fun currentUserScores() {
-
+            result.addSource(games()) {
+                doFetch(firebaseAuthLiveData.getCurrentUser()?.uid, it)
+            }
+            _currentUserScoreSheets = result
+        }
+        return _currentUserScoreSheets!!
     }
 
     // ==================================================

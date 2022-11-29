@@ -19,6 +19,31 @@ class ViewModelDBHelper {
     private val playerCollection = "allPlayers"
     private val scoresheetsCollection = "scoresheets"
 
+    fun fetchAllScoreSheetsForUser(scoresheetsLiveData: MutableLiveData<List<ScoreSheet>>, userId: String, games: List<Game>) {
+        val scoresheets = ArrayList<ScoreSheet>()
+        db.runTransaction { batch ->
+            for (game in games) {
+                val res = batch.get(
+                    db.collection(gameCollection)
+                        .document(game.firestoreID)
+                        .collection(scoresheetsCollection)
+                        .document(userId)
+                )
+
+                val scoresheet = res.toObject(RawScoreSheet::class.java)
+
+                if (scoresheet != null) {
+                    scoresheets.add(scoresheet.toScoreSheet())
+                }
+            }
+        }.addOnSuccessListener {
+            Log.d(javaClass.simpleName, "Loaded ${scoresheets.size} scoresheets for player $userId")
+            scoresheetsLiveData.postValue(scoresheets)
+        }.addOnFailureListener {
+            Log.d(javaClass.simpleName, "Failed to load all scoresheets for user ${userId}")
+        }
+    }
+
     fun refreshGame(gameData: MutableLiveData<Game>) {
         val game = gameData.value!!
         db.collection(gameCollection).document(game.firestoreID)
