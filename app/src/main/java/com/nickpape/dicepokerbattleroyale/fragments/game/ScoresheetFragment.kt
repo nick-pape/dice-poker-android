@@ -157,6 +157,9 @@ class ScoresheetFragment : Fragment() {
                     colors[2] = Color.YELLOW
                     CommonConfetti.rainingConfetti(binding.root, colors).oneShot().animate()
                     Log.d(javaClass.simpleName, "CONFETTI!")
+
+                    viewModel.playYahtzeeSound()
+
                 }
 
                 viewModel.updateScoresheet(scoreFieldBinding.field, potentialScore, isBonusYahtzeeEligible)

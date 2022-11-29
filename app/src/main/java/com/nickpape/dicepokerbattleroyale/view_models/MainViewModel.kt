@@ -1,5 +1,6 @@
 package com.nickpape.dicepokerbattleroyale.view_models
 
+import android.content.Context
 import android.provider.MediaStore.Audio.Media
 import android.util.Log
 import androidx.lifecycle.*
@@ -11,10 +12,28 @@ import com.nickpape.dicepokerbattleroyale.models.*
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
+import android.media.MediaPlayer
+import com.nickpape.dicepokerbattleroyale.R
 
 class MainViewModel: ViewModel() {
     // Database access
     private val dbHelp = ViewModelDBHelper()
+
+    var diceRollPlayer: MediaPlayer = MediaPlayer()
+    var yahtzeePlayer: MediaPlayer = MediaPlayer()
+
+    fun playYahtzeeSound() {
+        yahtzeePlayer.start()
+    }
+
+    fun playDiceRollSound() {
+        diceRollPlayer.start()
+    }
+
+    fun setApplicationContext(applicationContext: Context) {
+        diceRollPlayer = MediaPlayer.create(applicationContext, R.raw.dice_roll)
+        yahtzeePlayer = MediaPlayer.create(applicationContext, R.raw.yahtzee)
+    }
 
     // ================= User Authentication =====================
     var firebaseAuthLiveData = FirestoreAuthLiveData()
@@ -478,10 +497,12 @@ class MainViewModel: ViewModel() {
     }
 
     val canRollAgain: LiveData<Boolean> = PairedLiveData<Boolean, Int, Boolean>(diceCount, isGameOver()) { diceCount, gameOver ->
-        return@PairedLiveData diceCount < 3 && !gameOver
+        return@PairedLiveData diceCount < 30 && !gameOver
     }
 
     fun rollDice() {
+        playDiceRollSound()
+
         val newDice = playerDice.value!!.map {
             if (it.isHeld) {
                 return@map it

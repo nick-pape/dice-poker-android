@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         AuthInit(mainViewModel, signInLauncher)
 
+        mainViewModel.setApplicationContext(applicationContext)
+
         mainViewModel.firebaseAuthLiveData.observe(this) {
             if (it != null) {
                 mainViewModel.addOrUpdatePlayer(
