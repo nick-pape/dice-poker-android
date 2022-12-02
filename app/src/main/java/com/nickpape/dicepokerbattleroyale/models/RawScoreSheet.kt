@@ -109,6 +109,7 @@ class ScoreSheet {
 
     fun isGameOver(): Boolean {
         return ScoreableField.values()
+            .filter { it != ScoreableField.YahtzeeBonus }
             .map { getField(it) != null }
             .all { it }
     }
